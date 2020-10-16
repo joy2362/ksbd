@@ -19,6 +19,7 @@ class SiteDetailsSeeder extends Seeder
             'phone_1'=>'01794790598',
             'email'=>'Koreanshopbangladesh@gmail.com',
             'facebook_link'=>'Koreanshopbangladesh@gmail.com',
+            'google_link'=>'Koreanshopbangladesh@gmail.com',
             'instagram_link'=>'Koreanshopbangladesh@gmail.com',
         ]);
     }

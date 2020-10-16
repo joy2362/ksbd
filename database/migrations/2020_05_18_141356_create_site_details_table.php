@@ -19,7 +19,7 @@ class CreateSiteDetailsTable extends Migration
             $table->string('address');
             $table->string('logo');
             $table->string('phone_1');
-            $table->string('phone_2');
+            $table->string('phone_2')->nullable();;
             $table->string('email');
             $table->string('facebook_link');
             $table->string('google_link');
