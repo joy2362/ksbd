@@ -16,6 +16,7 @@ class AdminSeeder extends Seeder
         'name'=>'abdullah zahid',
         'phone'=>'01780134797',
         'email'=>'abdullahzahidjoy@gmail.com',
+        'avatar'=>'public\backend\img\joy2362.jpg',
         'password'=>Hash::make('2362'),
     ]);
     }
