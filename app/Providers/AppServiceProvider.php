@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $siteinfo=SiteDetails::where('id',1)->get();
-        $coupon=Coupon::where('status','1')->get();
-        View::share(compact('siteinfo','coupon')  );
+//        $siteinfo=SiteDetails::where('id',1)->get();
+//        $coupon=Coupon::where('status','1')->get();
+//        View::share(compact('siteinfo','coupon')  );
 
         Schema::defaultStringLength(191);
     }
