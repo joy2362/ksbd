@@ -28,25 +28,6 @@
             </ul>
         </div>
     </div>
-    <div class="ps-section masonry-root pt-80 pb-40">
-        <div class="ps-container">
-            <div class="ps-section__header mb-50">
-                <h3 class="ps-section__title" data-mask="Promotion">- Our Event</h3>
-            </div>
-            <div class="ps-section__content pb-50">
-                <div class="masonry-wrapper" data-col-md="3" data-col-sm="2" data-col-xs="1" data-gap="30" data-radio="100%">
-                    <div class="ps-masonry">
-                        <div class="grid-sizer"></div>
-                        @foreach($topItems as $row)
-                        <div class="grid-item">
-                            <div class="grid-item__content-wrapper"><a class="ps-offer" href="{{url('product-details/'.$row->id)}}"><img src="{{asset($row->img_1)}}" alt="" height="250" width="400"></a></div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="ps-owl-root ps-section pt-80 pb-40">
         <div class="ps-container">
             <div class="ps-section__header mb-50">
@@ -78,7 +59,7 @@
                                     <button class="ps-shoe__favorite addwishlist"  data-id="{{$row->id}}"><i class="ps-icon-heart"></i></button>
                                     <img src="{{asset($row->img_1)}}" alt=""><a class="ps-shoe__overlay" href="{{url('product-details/'.$row->id)}}"></a>
                                 </div>
-                                <div class="ps-shoe__content">
+                                <div class="ps-shoe__content mt-3">
                                     <div class="ps-shoe__variants text-center">
                                         <div class="addtocart ">
                                             <button class="btn btn-primary btn-sm addcart" data-id="{{$row->id}}">Add to Cart</button>
@@ -95,7 +76,7 @@
                                         </div>
                                     </div>
                                     <div class="ps-shoe__detail mt-1"><a class="ps-shoe__name" href="{{url('product-details/'.$row->id)}}">{{$row->product_name}}</a>
-                                        <p class="ps-shoe__categories">{{$row->category->category_name}}, {{$row->brand->brand_name}}, {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>
+                                        <p class="ps-shoe__categories"> {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -149,8 +130,7 @@
                                                 </div>
                                             </div>
                                             <div class="ps-shoe__detail mt-1"><a class="ps-shoe__name" href="{{url('product-details/'.$row->id)}}">{{$row->product_name}}</a>
-                                                <p class="ps-shoe__categories"><a href="#">{{$row->category->category_name}}</a>,<a href="#"> {{$row->brand->brand_name}}</a>,<a href="#"> {{$row->skinconcern->skin_concern}}</a>,<a href="#"> {{$row->skintype->type_of_skin}}</a></p>
-                                            </div>
+                                                <p class="ps-shoe__categories"> {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -208,8 +188,7 @@
                                             </div>
                                         </div>
                                         <div class="ps-shoe__detail mt-1"><a class="ps-shoe__name" href="{{url('product-details/'.$row->id)}}">{{$row->product_name}}</a>
-                                            <p class="ps-shoe__categories"><a href="#">{{$row->category->category_name}}</a>,<a href="#"> {{$row->brand->brand_name}}</a>,<a href="#"> {{$row->skinconcern->skin_concern}}</a>,<a href="#"> {{$row->skintype->type_of_skin}}</a></p>
-                                        </div>
+                                            <p class="ps-shoe__categories"> {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -308,8 +287,7 @@
                                     </div>
                                 </div>
                                 <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{url('product-details/'.$row->id)}}">{{$row->product_name}}</a>
-                                    <p class="ps-shoe__categories">{{$row->category->category_name}}, {{$row->brand->brand_name}}, {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>
-                                </div>
+                                    <p class="ps-shoe__categories"> {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>                                </div>
                             </div>
                         </div>
                     </div>

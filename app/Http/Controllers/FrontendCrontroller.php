@@ -40,16 +40,15 @@ class FrontendCrontroller extends Controller
             $request->session()->put('id',$CatchId);
         }
 
-        $topItems=Product::where('status','1')->where('flash_sale','1')->where('trend','1')->orderby('id','desc')->take(6)->get();
-        $flash_sale=Product::where('status','1')->where('flash_sale','1')->take(15)->get();
-        $trend=Product::where('status','1')->where('trend','1')->take(15)->get();
-        $topsale=Product::where('status','1')->take(15)->get();
+        $flash_sale=Product::where('status','1')->where('flash_sale','1')->take(10)->get();
+        $trend=Product::where('status','1')->where('trend','1')->take(8)->get();
+        $topsale=Product::where('status','1')->take(10)->get();
         $brands=Brand::all();
         $topslider=MainSlider::all();
-        $newproduct=Product::where('status','1')->orderby('id','desc')->take(8)->get();
+        $newproduct=Product::where('status','1')->orderby('id','desc')->take(16)->get();
         $blog=Blog::where('status','1')->orderby('id','desc')->take(3)->get();
 
-            return view('pages.index')->with(compact('brands','trend','newproduct','topslider','topsale','blog','flash_sale' ,'topItems'));
+            return view('pages.index')->with(compact('brands','trend','newproduct','topslider','topsale','blog','flash_sale' ));
 
     }
 

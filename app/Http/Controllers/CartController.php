@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Coupon;
 use App\Product;
 use Illuminate\Http\Request;
 use DB;
 use App\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use Cart;
+use Session;
 
 class CartController extends Controller
 {
@@ -42,12 +44,11 @@ class CartController extends Controller
             $data['qty']=1;
             if ($product->discount_price){
                 $data['price']= $product->discount_price;
-
             }else{
                 $data['price']= $product->selling_price;
             }
             $data['weight']=1;
-            $data['options']['image']=$product->image_one;
+            $data['options']['image']=$product->img_1;
 
             Cart::add($data);
         }else{
@@ -75,7 +76,7 @@ class CartController extends Controller
                 $data['price']= $product->selling_price;
             }
             $data['weight']=1;
-            $data['options']['image']=$product->image_one;
+            $data['options']['image']=$product->img_1;
 
             Cart::add($data);
         }else{
@@ -90,5 +91,91 @@ class CartController extends Controller
             'alert-type'=>'success'
         );
         return redirect()->back()->with($notification);
+    }
+
+    public function showCart(){
+
+        if(Cart::count() >1){
+            $cart= Cart::content();
+            return view('pages.cart')->with(compact('cart'));
+        }else{
+            $notification=array(
+                'messege'=>'No product found in your cart',
+                'alert-type'=>'error'
+            );
+            return redirect()->back()->with($notification);
+        }
+    }
+
+    public function updateCart(Request $request){
+        Cart::update($request->productid, $request->qty);
+        $notification=array(
+            'messege'=>'Successfully Update item',
+            'alert-type'=>'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+    public function removeItem(Request $request){
+        Cart::remove($request->productid);
+        $notification=array(
+            'messege'=>'Item Removed',
+            'alert-type'=>'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+    public function applyCouppon(Request $request){
+        $check = Coupon::where('status','1')->where('code',$request->coupon)->first();
+
+
+        if ($check){
+            $item=Cart::content();
+            $total=0;
+            foreach ($item as $row){
+                $total+=$row->price *$row->qty;
+            }
+            $discount=($total * $check->discount ) /100;
+
+            session::put('coupon',[
+                'name' => $check->code,
+                'discount' =>$discount,
+                'balance' => $total - $discount
+            ]);
+            $notification=array(
+                'messege'=>'Successfully Coupon Applied',
+                'alert-type'=>'success'
+            );
+            return redirect()->back()->with($notification);
+        }else{
+            $notification=array(
+                'messege'=>'Invalid Coupon',
+                'alert-type'=>'error'
+            );
+            return redirect()->back()->with($notification);
+        }
+    }
+
+    public function CouponRemove()
+    {
+        session::forget('coupon');
+        return redirect()->back();
+    }
+
+    public function showCheckout(){
+        if(Cart::count() >1){
+            $cart= Cart::content();
+            $total=0;
+            foreach ($cart as $row){
+                $total+=$row->price *$row->qty;
+            }
+            return view('pages.checkout')->with(compact('cart','total'));
+        }else{
+            $notification=array(
+                'messege'=>'No product found in your cart',
+                'alert-type'=>'error'
+            );
+            return redirect()->back()->with($notification);
+        }
     }
 }

@@ -1,83 +1,112 @@
 @extends('layouts/master')
 
 @section('content')
-    <div class="ps-content pt-80 pb-80">
+    <div class="ps-checkout pt-80 pb-80">
         <div class="ps-container">
-            <div class="ps-cart-listing">
-                <table class="table ps-cart__table">
-                    <thead>
-                    <tr>
-                        <th>All Products</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><a class="ps-product__preview" href="product-detail.html"><img class="mr-15" src="images/product/cart-preview/1.jpg" alt=""> air jordan One mid</a></td>
-                        <td>$150</td>
-                        <td>
-                            <div class="form-group--number">
-                                <button class="minus"><span>-</span></button>
-                                <input class="form-control" type="text" value="2">
-                                <button class="plus"><span>+</span></button>
+            <form class="ps-checkout__form" action="{{url('payment')}}" method="post">
+                @csrf
+                <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 ">
+                        <div class="ps-checkout__billing">
+                            <h3>Billing Detail</h3>
+                            <div class="form-group form-group--inline">
+                                <label>Full Name<span>*</span>
+                                </label>
+                                <input class="form-control" type="name" name="fullName">
                             </div>
-                        </td>
-                        <td>$300</td>
-                        <td>
-                            <div class="ps-remove"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a class="ps-product__preview" href="product-detail.html"><img class="mr-15" src="images/product/cart-preview/2.jpg" alt=""> The Crusty Croissant</a></td>
-                        <td>$150</td>
-                        <td>
-                            <div class="form-group--number">
-                                <button class="minus"><span>-</span></button>
-                                <input class="form-control" type="text" value="2">
-                                <button class="plus"><span>+</span></button>
+                            <div class="form-group form-group--inline">
+                                <label>Email Address<span>*</span>
+                                </label>
+                                <input class="form-control" type="email" name="email">
                             </div>
-                        </td>
-                        <td>$300</td>
-                        <td>
-                            <div class="ps-remove"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a class="ps-product__preview" href="product-detail.html"><img class="mr-15" src="images/product/cart-preview/3.jpg" alt="">The Rolling Pin</a></td>
-                        <td>$150</td>
-                        <td>
-                            <div class="form-group--number">
-                                <button class="minus"><span>-</span></button>
-                                <input class="form-control" type="text" value="2">
-                                <button class="plus"><span>+</span></button>
+
+                            <div class="form-group form-group--inline">
+                                <label>Phone<span>*</span>
+                                </label>
+                                <input class="form-control" type="text" name="phone">
                             </div>
-                        </td>
-                        <td>$300</td>
-                        <td>
-                            <div class="ps-remove"></div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="ps-cart__actions">
-                    <div class="ps-cart__promotion">
-                        <div class="form-group">
-                            <div class="ps-form--icon"><i class="fa fa-angle-right"></i>
-                                <input class="form-control" type="text" placeholder="Promo Code">
+                            <div class="form-group form-group--inline">
+                                <label>Address<span>*</span>
+                                </label>
+                                <input class="form-control" type="text" name="address">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <button class="ps-btn ps-btn--gray">Continue Shopping</button>
+
                         </div>
                     </div>
-                    <div class="ps-cart__total">
-                        <h3>Total Price: <span> 2599.00 $</span></h3><a class="ps-btn" href="checkout.html">Process to checkout<i class="ps-icon-next"></i></a>
+                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 ">
+                        <div class="ps-checkout__order">
+                            <header>
+                                <h3>Your Order</h3>
+                            </header>
+                            <div class="content">
+                                <table class="table ps-checkout__products">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-uppercase">Product</th>
+                                        <th class="text-uppercase">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($cart as $row)
+                                    <tr>
+                                        <td>{{$row->name}} x{{$row->qty}}</td>
+                                        <td>{{$row->price }} BDT</td>
+                                    </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td>Card Subtitle</td>
+                                        <td> {{ cart::Subtotal() }} BDT</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shipping charge</td>
+                                        <td>100 BDT</td>
+                                    </tr>
+                                    @if(Session::has('coupon'))
+                                    <tr>
+                                        <td>Coupon</td>
+                                        <td>- {{Session::get('coupon')['discount']}} BDT</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>{{Session::get('coupon')['balance'] + 100}} BDT</td>
+                                    </tr>
+                                        @else
+                                        <tr>
+                                            <td>Total</td>
+                                            <td>{{$total + 100}} BDT</td>
+                                        </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                            <footer>
+                                <h3>Payment Method</h3>
+                                <div class=" cheque">
+                                    <div class="ps-radio">
+                                        <input class="form-control" type="radio" id="rdo01" name="payment" value="cod">
+                                        <label for="rdo01">Cash On Delivery</label>
+                                    </div>
+                                </div>
+                                <div class=" paypal">
+                                    <div class="ps-radio ps-radio--inline">
+                                        <input class="form-control" type="radio" name="payment" value="paypal" id="paypal">
+                                        <label for="paypal"><img src="{{asset('public/frontend/images/payment/1.png')}}" style="max-width: 50px; background-color: #fff;" alt=""></label>
+                                    </div>
+                                    <div class="ps-radio ps-radio--inline">
+                                        <input class="form-control" type="radio" name="payment" id="stripe" value="stripe">
+                                        <label for="stripe"><img src="{{asset('public/frontend/images/payment/2.png')}}" style="max-width: 50px; background-color: #fff;" alt=""></label>
+                                    </div>
+                                    <div class="ps-radio ps-radio--inline">
+                                        <input class="form-control" type="radio" name="payment" id="ideal" value="ideal">
+                                        <label for="ideal" ><img src="{{asset('public/frontend/images/payment/3.png')}}"  style="max-width: 50px; background-color: #fff;" alt=""></label>
+                                    </div>
+                                    <button class="ps-btn ps-btn--fullwidth" type="submit">Place Order<i class="ps-icon-next"></i></button>
+                                </div>
+                            </footer>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection

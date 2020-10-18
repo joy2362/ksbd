@@ -2,13 +2,23 @@
 
 //frontend
 //home
-Route::get('/', 'FrontendCrontroller@index')->name('home');
+Route::get('/', 'FrontendCrontroller@index')->name('index');
 //newsletter
 Route::post('/store/newsletter', 'FrontendCrontroller@storenewsletter')->name('store.newsletter');
 
 //cart & wishlist
 Route::get('add/wishlist/{id}', 'CartController@addwishlist');
 Route::get('add/cart/{id}', 'CartController@addcart');
+Route::get('cart', 'CartController@showCart');
+Route::get('checkout', 'CartController@showCheckout');
+Route::post('payment', 'PaymentController@payment');
+
+
+Route::get('coupon/remove', 'CartController@CouponRemove');
+Route::post('update/cart', 'CartController@updateCart');
+Route::post('remove/cart/item', 'CartController@removeItem');
+Route::post('coupon/apply', 'CartController@applyCouppon');
+
 Route::post('add/to/cart', 'CartController@insertcart');
 Route::get('remove/wishlist/{id}', 'FrontendCrontroller@removewishlist');
 Route::get('wishlist', 'FrontendCrontroller@showWishlist');
@@ -16,7 +26,6 @@ Route::get('wishlist', 'FrontendCrontroller@showWishlist');
 //compare
 Route::get('add/compare/{id}', 'compareController@store');
 Route::get('compare', 'compareController@show');
-
 
 //blog
 Route::get('/blog', 'BlogController@allBlog');

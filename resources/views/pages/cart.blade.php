@@ -15,66 +15,68 @@
                     </tr>
                     </thead>
                     <tbody>
+                    @foreach($cart as $row)
                     <tr>
-                        <td><a class="ps-product__preview" href="product-detail.html"><img class="mr-15" src="images/product/cart-preview/1.jpg" alt=""> air jordan One mid</a></td>
-                        <td>$150</td>
+                        <td><a class="ps-product__preview" href="{{url('product-details/'.$row->id)}}"><img class="mr-15" src="{{$row->options->image}}" height="100" width="100" alt=""> {{$row->name}}</a></td>
+                        <td>{{$row->price}} BDT</td>
                         <td>
                             <div class="form-group--number">
-                                <button class="minus"><span>-</span></button>
-                                <input class="form-control" type="text" value="2">
-                                <button class="plus"><span>+</span></button>
+                                <form method="post" action="{{url('update/cart')}}">
+                                @csrf
+                                    <input class="form-control" type="number" value="{{$row->qty}}" min="1" max="100" name="qty">
+                                    <input type="hidden" name="productid" value="{{ $row->rowId }}">
+                                    <button type="submit" class="plus"><span><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span></button>
+                                </form>
                             </div>
                         </td>
-                        <td>$300</td>
+                        <td>{{ $row->price * $row->qty }} BDT</td>
                         <td>
-                            <div class="ps-remove"></div>
+                            <form method="post" action="{{url('remove/cart/item')}}">
+                                @csrf
+                                <input type="hidden" name="productid" value="{{ $row->rowId }}">
+                                <button type="submit" class="ps-remove"></button>
+                            </form>
                         </td>
                     </tr>
-                    <tr>
-                        <td><a class="ps-product__preview" href="product-detail.html"><img class="mr-15" src="images/product/cart-preview/2.jpg" alt=""> The Crusty Croissant</a></td>
-                        <td>$150</td>
-                        <td>
-                            <div class="form-group--number">
-                                <button class="minus"><span>-</span></button>
-                                <input class="form-control" type="text" value="2">
-                                <button class="plus"><span>+</span></button>
-                            </div>
-                        </td>
-                        <td>$300</td>
-                        <td>
-                            <div class="ps-remove"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a class="ps-product__preview" href="product-detail.html"><img class="mr-15" src="images/product/cart-preview/3.jpg" alt="">The Rolling Pin</a></td>
-                        <td>$150</td>
-                        <td>
-                            <div class="form-group--number">
-                                <button class="minus"><span>-</span></button>
-                                <input class="form-control" type="text" value="2">
-                                <button class="plus"><span>+</span></button>
-                            </div>
-                        </td>
-                        <td>$300</td>
-                        <td>
-                            <div class="ps-remove"></div>
-                        </td>
-                    </tr>
+
+                    @endforeach
                     </tbody>
                 </table>
                 <div class="ps-cart__actions">
+
                     <div class="ps-cart__promotion">
+                        <form method="post" action="{{url('coupon/apply')}}">
+                            @csrf
                         <div class="form-group">
                             <div class="ps-form--icon"><i class="fa fa-angle-right"></i>
-                                <input class="form-control" type="text" placeholder="Promo Code">
+                                @if(Session::has('coupon'))
+                                     <input class="form-control" type="text"  value="{{Session::get('coupon')['name']}}" name="coupon" readonly>
+                                @else
+                                    <input class="form-control" type="text" placeholder="Promo Code" name="coupon">
+                                @endif
                             </div>
                         </div>
-                        <div class="form-group">
-                            <button class="ps-btn ps-btn--gray">Continue Shopping</button>
+
+                        <div class="form-group mt-5">
+                            @if(!Session::has('coupon'))
+                                <button class="ps-btn ps-btn--gray" type="submit">Apply Coupon</button>
+                            @else
+                                <a class="ps-btn ps-btn--gray" href="{{url('coupon/remove')}}">Remove Coupon</a>
+                            @endif
                         </div>
+
+                        </form>
                     </div>
+
                     <div class="ps-cart__total">
-                        <h3>Total Price: <span> 2599.00 $</span></h3><a class="ps-btn" href="checkout.html">Process to checkout<i class="ps-icon-next"></i></a>
+                        @if(!Session::has('coupon'))
+                        <h3>Total Price: <span> {{ cart::Subtotal() }} BDT</span></h3>
+                        @else
+                            <h3>Subtotal: <span> {{ cart::Subtotal() }} BDT</span></h3>
+                            <h3>Coupon: <span> - {{ Session::get('coupon')['discount'] }} BDT</span></h3>
+                            <h3>Total : <span> {{ Session::get('coupon')['balance'] }} BDT</span></h3>
+                        @endif
+                        <a class="ps-btn" href="{{url('checkout')}}">Process to checkout<i class="ps-icon-next"></i></a>
                     </div>
                 </div>
             </div>
