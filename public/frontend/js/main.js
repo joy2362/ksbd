@@ -427,14 +427,14 @@
                     var $this = $(this),
                         values = ui.values;
 
-                    min.text('$' + values[0]);
-                    max.text('$' + values[1]);
+                    min.text(values[0]+'BDT');
+                    max.text(values[1]+'BDT');
                 }
             });
 
             var values = el.slider("option", "values");
-            min.text('$' + values[0]);
-            max.text('$' + values[1]);
+            min.text(values[0]+'BDT');
+            max.text(values[1]+'BDT');
         }
         else {
             return false;

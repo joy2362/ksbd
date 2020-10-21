@@ -199,11 +199,10 @@
             </div>
             <div class="navigation__column center">
                 <ul class="main-menu menu">
-                    <li class="menu-item"><a href="index.html">Home</a></li>
-                    <li class="menu-item "><a href="#">Men</a></li>
-                    <li class="menu-item"><a href="#">Women</a></li>
-                    <li class="menu-item"><a href="#">Kids</a></li>
-                    <li class="menu-item"><a href="#">News</a></li>
+                    <li class="menu-item"><a href="{{url('/')}}">Home</a></li>
+
+                    <li class="menu-item"><a href="{{url('all/product')}}">All Products</a></li>
+                    <li class="menu-item"><a href="{{url('/blog')}}">News</a></li>
                     <li class="menu-item"><a href="#">Contact</a></li>
                 </ul>
             </div>

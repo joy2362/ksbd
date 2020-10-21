@@ -67,6 +67,12 @@
                 <li class="nav-item"><a href="{{route('add.product')}}" class="nav-link">Add Product</a></li>
                 <li class="nav-item"><a href="{{route('view.product')}}" class="nav-link">All Product</a></li>
             </ul>
+            <a href="{{url('admin/order/all')}}" class="sl-menu-link {{ (request()->is('admin/order*')) ? 'active' : '' }}">
+                <div class="sl-menu-item">
+                    <i class="menu-item-icon icon ion-ios-email-outline tx-24"></i>
+                    <span class="menu-item-label">Order</span>
+                </div><!-- menu-item -->
+            </a><!-- sl-menu-link -->
             <a href="#" class="sl-menu-link {{ (request()->is('admin/post*')) ? 'active' : '' }}">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon icon ion-ios-book-outline tx-24"></i>

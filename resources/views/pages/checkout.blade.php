@@ -3,7 +3,7 @@
 @section('content')
     <div class="ps-checkout pt-80 pb-80">
         <div class="ps-container">
-            <form class="ps-checkout__form" action="{{url('payment')}}" method="post">
+            <form class="ps-checkout__form" action="{{ url('/pay') }}" method="post">
                 @csrf
                 <div class="row">
                     <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 ">
@@ -12,7 +12,7 @@
                             <div class="form-group form-group--inline">
                                 <label>Full Name<span>*</span>
                                 </label>
-                                <input class="form-control" type="name" name="fullName">
+                                <input class="form-control" type="name" name="name">
                             </div>
                             <div class="form-group form-group--inline">
                                 <label>Email Address<span>*</span>
@@ -29,6 +29,12 @@
                                 <label>Address<span>*</span>
                                 </label>
                                 <input class="form-control" type="text" name="address">
+                            </div>
+                            <div class="form-group form-group--inline">
+                                <label>Country<span>*</span></label>
+                                <select class="form-control " name="country" id="country" readonly>
+                                    <option selected value="Bangladesh">Bangladesh</option>
+                                </select>
                             </div>
 
                         </div>
@@ -62,6 +68,7 @@
                                         <td>100 BDT</td>
                                     </tr>
                                     @if(Session::has('coupon'))
+
                                     <tr>
                                         <td>Coupon</td>
                                         <td>- {{Session::get('coupon')['discount']}} BDT</td>
@@ -69,38 +76,21 @@
                                     <tr>
                                         <td>Total</td>
                                         <td>{{Session::get('coupon')['balance'] + 100}} BDT</td>
+                                        <input type="hidden" name="amount" value="{{Session::get('coupon')['balance'] + 100}}">
                                     </tr>
                                         @else
                                         <tr>
                                             <td>Total</td>
                                             <td>{{$total + 100}} BDT</td>
+                                            <input type="hidden" name="amount" value="{{$total + 100}}">
                                         </tr>
                                         @endif
                                     </tbody>
                                 </table>
                             </div>
                             <footer>
-                                <h3>Payment Method</h3>
-                                <div class=" cheque">
-                                    <div class="ps-radio">
-                                        <input class="form-control" type="radio" id="rdo01" name="payment" value="cod">
-                                        <label for="rdo01">Cash On Delivery</label>
-                                    </div>
-                                </div>
                                 <div class=" paypal">
-                                    <div class="ps-radio ps-radio--inline">
-                                        <input class="form-control" type="radio" name="payment" value="paypal" id="paypal">
-                                        <label for="paypal"><img src="{{asset('public/frontend/images/payment/1.png')}}" style="max-width: 50px; background-color: #fff;" alt=""></label>
-                                    </div>
-                                    <div class="ps-radio ps-radio--inline">
-                                        <input class="form-control" type="radio" name="payment" id="stripe" value="stripe">
-                                        <label for="stripe"><img src="{{asset('public/frontend/images/payment/2.png')}}" style="max-width: 50px; background-color: #fff;" alt=""></label>
-                                    </div>
-                                    <div class="ps-radio ps-radio--inline">
-                                        <input class="form-control" type="radio" name="payment" id="ideal" value="ideal">
-                                        <label for="ideal" ><img src="{{asset('public/frontend/images/payment/3.png')}}"  style="max-width: 50px; background-color: #fff;" alt=""></label>
-                                    </div>
-                                    <button class="ps-btn ps-btn--fullwidth" type="submit">Place Order<i class="ps-icon-next"></i></button>
+                                    <button class="ps-btn ps-btn--fullwidth" type="submit">Pay Now<i class="ps-icon-next"></i></button>
                                 </div>
                             </footer>
                         </div>
@@ -109,4 +99,15 @@
             </form>
         </div>
     </div>
+    <script>
+        (function (window, document) {
+            var loader = function () {
+                var script = document.createElement("script"), tag = document.getElementsByTagName("script")[0];
+                script.src = "https://sandbox.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7);
+                tag.parentNode.insertBefore(script, tag);
+            };
+
+            window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+        })(window, document);
+    </script>
 @endsection

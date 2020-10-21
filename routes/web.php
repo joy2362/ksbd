@@ -3,6 +3,12 @@
 //frontend
 //home
 Route::get('/', 'FrontendCrontroller@index')->name('index');
+//product list
+Route::get('all/product', 'ProductListController@index');
+Route::get('product/category/{id}', 'ProductListController@categoryFilter');
+Route::get('product/brand/{id}', 'ProductListController@brandFilter');
+Route::get('product/skintype/{id}', 'ProductListController@skintypeFilter');
+Route::get('product/skinconcerns/{id}', 'ProductListController@skinconcernsFilter');
 //newsletter
 Route::post('/store/newsletter', 'FrontendCrontroller@storenewsletter')->name('store.newsletter');
 
@@ -39,7 +45,6 @@ Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
 Route::get('/callback/{provider}', 'SocialController@callback');
 //auth & user
 Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/password-change', 'HomeController@changePassword')->name('password.change');
 Route::post('/password-update', 'HomeController@updatePassword')->name('password.update');
 Route::get('/user/logout', 'HomeController@Logout')->name('user.logout');
@@ -141,4 +146,25 @@ Route::post('admin/siteinfo/update/mainslider', 'Admin\Slider\MainSliderControll
 Route::get('admin/siteinfo/sitedetails', 'Admin\sitedetails\SitedetailsController@siteinfo')->name('siteSetting');
 Route::post('admin/siteinfo/sitedetails', 'Admin\sitedetails\SitedetailsController@editsiteinfo')->name('editsiteSetting');
 
+//order
+Route::get('admin/order/all', 'Admin\order\OrderController@index')->name('all-order');
+Route::get('admin/order/view/{id}', 'Admin\order\OrderController@show');
 
+Route::get('admin/order/accept/{id}', 'Admin\order\OrderController@PaymentAccept');
+Route::get('admin/order/cancel/{id}', 'Admin\order\OrderController@PaymentCancel');
+Route::get('admin/order/delevery/progress/{id}', 'Admin\order\OrderController@DeleveryProgress');
+Route::get('admin/order/delevery/done/{id}', 'Admin\order\OrderController@DeleveryDone');
+
+// SSLCOMMERZ Start
+Route::get('/example1', 'SslCommerzPaymentController@exampleEasyCheckout');
+Route::get('/example2', 'SslCommerzPaymentController@exampleHostedCheckout');
+
+Route::post('/pay', 'SslCommerzPaymentController@index');
+Route::post('/pay-via-ajax', 'SslCommerzPaymentController@payViaAjax');
+
+Route::post('/success', 'SslCommerzPaymentController@success');
+Route::post('/fail', 'SslCommerzPaymentController@fail');
+Route::post('/cancel', 'SslCommerzPaymentController@cancel');
+
+Route::post('/ipn', 'SslCommerzPaymentController@ipn');
+//SSLCOMMERZ END

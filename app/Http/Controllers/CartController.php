@@ -95,16 +95,9 @@ class CartController extends Controller
 
     public function showCart(){
 
-        if(Cart::count() >1){
-            $cart= Cart::content();
-            return view('pages.cart')->with(compact('cart'));
-        }else{
-            $notification=array(
-                'messege'=>'No product found in your cart',
-                'alert-type'=>'error'
-            );
-            return redirect()->back()->with($notification);
-        }
+        $cart= Cart::content();
+        return view('pages.cart')->with(compact('cart'));
+
     }
 
     public function updateCart(Request $request){
@@ -127,7 +120,6 @@ class CartController extends Controller
 
     public function applyCouppon(Request $request){
         $check = Coupon::where('status','1')->where('code',$request->coupon)->first();
-
 
         if ($check){
             $item=Cart::content();

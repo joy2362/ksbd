@@ -191,6 +191,7 @@
                                             <p class="ps-shoe__categories"> {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                         @endforeach
@@ -287,7 +288,7 @@
                                     </div>
                                 </div>
                                 <div class="ps-shoe__detail"><a class="ps-shoe__name" href="{{url('product-details/'.$row->id)}}">{{$row->product_name}}</a>
-                                    <p class="ps-shoe__categories"> {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>                                </div>
+                                    <p class="ps-shoe__categories"> {{$row->skinconcern->skin_concern}}, {{$row->skintype->type_of_skin}}</p>                                   </div>
                             </div>
                         </div>
                     </div>
