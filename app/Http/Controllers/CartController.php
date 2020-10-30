@@ -94,7 +94,6 @@ class CartController extends Controller
     }
 
     public function showCart(){
-
         $cart= Cart::content();
         return view('pages.cart')->with(compact('cart'));
 

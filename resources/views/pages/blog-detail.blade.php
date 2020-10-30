@@ -71,5 +71,4 @@
     </div>
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v8.0&appId=2359594734340210&autoLogAppEvents=1" nonce="WXpQX3hM"></script>
-
 @endsection

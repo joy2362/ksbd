@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Brand;
+use App\Order;
+use App\Product;
+use App\User;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Admin;
+use DB;
 class AdminController extends Controller
 {
         /**
@@ -25,9 +30,15 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //$admininfo=Admin::find(Auth::id());
-        //return view('admin.home',compact('admininfo'));
-        return view('admin.home');
+        $today=Order::whereDate('order_at', now())->sum('amount');
+        $month=Order::whereMonth('order_at','=',now())->sum('amount');
+        $year=Order::whereYear('order_at','=',now())->sum('amount');
+        $delevery=Order::whereDate('order_at', now())->where('status','done')->sum('amount');
+        $product=Product::count();
+        $brand=Brand::count();
+        $user=User::count();
+        $return=Order::where('return_order',2)->sum('amount');
+        return view('admin.home')->with(compact('product','brand','user','today','month','year','delevery','return'));
     }
 
     public function ChangePassword()

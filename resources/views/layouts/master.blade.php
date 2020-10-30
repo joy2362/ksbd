@@ -52,6 +52,29 @@
                 </div>
                 <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 ">
                     <div class="header__actions">
+                        <!--order tracking modal-->
+                        <div class="modal fade" id="order" tabindex="-1" role="dialog" aria-labelledby="order" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Your Order Id</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="{{ route('order.tracking') }}">
+                                            @csrf
+                                            <div class="form-row">
+                                                <input type="text" name="code" required="" class="form-control" placeholder="Your Order id">
+                                            </div><br>
+                                            <button class="btn btn-danger" type="submit">Track Now</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end order tracking  modal-->
                         <!--login modal-->
                         <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
@@ -80,11 +103,11 @@
                                            @csrf
                                            <div class="form-group">
                                                <label for="email">Email address</label>
-                                               <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" autofocus>
+                                               <input type="email" class="form-control"  name="email" value="{{ old('email') }}" autofocus>
                                            </div>
                                            <div class="form-group">
                                                <label for="password">Password</label>
-                                               <input type="password" class="form-control" id="password" name="password">
+                                               <input type="password" class="form-control"  name="password">
                                            </div>
                                            <div class="form-group">
                                                <a href="{{ route('password.request') }}">
@@ -164,13 +187,14 @@
                             </div>
                         </div>
                         <!--end registaion modal-->
+                        <a href="#" data-toggle="modal" data-target="#order">Track Order</a>
                         @guest
                             <a href="#" data-toggle="modal" data-target="#login">Login</a>
                             <a href="#" data-toggle="modal" data-target="#reg">Regiser</a>
                         @else
                             <div class="btn-group ps-dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}<i class="fa fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Profile</a></li>
+                                    <li><a href="{{url('profile')}}">Profile</a></li>
                                     <li><a href="#">Setting</a></li>
                                     <li> <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -203,7 +227,7 @@
 
                     <li class="menu-item"><a href="{{url('all/product')}}">All Products</a></li>
                     <li class="menu-item"><a href="{{url('/blog')}}">News</a></li>
-                    <li class="menu-item"><a href="#">Contact</a></li>
+                    <li class="menu-item"><a href="{{url('contact')}}">Contact</a></li>
                 </ul>
             </div>
             <div class="navigation__column right">
@@ -487,6 +511,7 @@
         }
     })
 </script>
+
 
 </body>
 </html>

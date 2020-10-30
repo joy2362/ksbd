@@ -3,12 +3,25 @@
 //frontend
 //home
 Route::get('/', 'FrontendCrontroller@index')->name('index');
+
+//feedback
+Route::get('contact', 'FrontendCrontroller@contact');
+Route::post('add/feedback', 'FrontendCrontroller@addFeedback');
+
+//user account
+Route::get('profile', 'FrontendCrontroller@profile');
+
+//return order
+Route::get('return/list/','HomeController@SuccessList')->name('success.orderlist');
+Route::get('request/return/{id}','HomeController@RequestReturn');
+
 //product list
 Route::get('all/product', 'ProductListController@index');
 Route::get('product/category/{id}', 'ProductListController@categoryFilter');
 Route::get('product/brand/{id}', 'ProductListController@brandFilter');
 Route::get('product/skintype/{id}', 'ProductListController@skintypeFilter');
 Route::get('product/skinconcerns/{id}', 'ProductListController@skinconcernsFilter');
+
 //newsletter
 Route::post('/store/newsletter', 'FrontendCrontroller@storenewsletter')->name('store.newsletter');
 
@@ -28,6 +41,9 @@ Route::post('coupon/apply', 'CartController@applyCouppon');
 Route::post('add/to/cart', 'CartController@insertcart');
 Route::get('remove/wishlist/{id}', 'FrontendCrontroller@removewishlist');
 Route::get('wishlist', 'FrontendCrontroller@showWishlist');
+
+//order tracking
+Route::post('order/tracking', 'FrontendCrontroller@OrderTracking')->name('order.tracking');
 
 //compare
 Route::get('add/compare/{id}', 'compareController@store');
@@ -148,12 +164,19 @@ Route::post('admin/siteinfo/sitedetails', 'Admin\sitedetails\SitedetailsControll
 
 //order
 Route::get('admin/order/all', 'Admin\order\OrderController@index')->name('all-order');
+Route::get('admin/order/return', 'Admin\order\OrderController@return')->name('return-order');
 Route::get('admin/order/view/{id}', 'Admin\order\OrderController@show');
 
 Route::get('admin/order/accept/{id}', 'Admin\order\OrderController@PaymentAccept');
 Route::get('admin/order/cancel/{id}', 'Admin\order\OrderController@PaymentCancel');
 Route::get('admin/order/delevery/progress/{id}', 'Admin\order\OrderController@DeleveryProgress');
 Route::get('admin/order/delevery/done/{id}', 'Admin\order\OrderController@DeleveryDone');
+
+//return order
+Route::get('admin/order/return', 'Admin\order\OrderController@return')->name('return-order');
+Route::get('admin/order/return/confirm/{id}', 'Admin\order\OrderController@returnconfirm');
+
+
 
 // SSLCOMMERZ Start
 Route::get('/example1', 'SslCommerzPaymentController@exampleEasyCheckout');

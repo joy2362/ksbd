@@ -26,6 +26,8 @@ class CreateOrdersTable extends Migration
             $table->string('card_type')->nullable();
             $table->string('store_amount')->nullable();
             $table->string('currency');
+            $table->date('order_at');
+            $table->boolean('return_order')->default('0');
             $table->timestamps();
         });
     }

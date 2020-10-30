@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Blog;
 use App\Brand;
+use App\feedback;
 use App\MainSlider;
+use App\Order;
 use App\Product;
 use DB;
 use App\Wishlist;
@@ -100,6 +102,49 @@ class FrontendCrontroller extends Controller
 
     }
 
+    public function OrderTracking(Request $request)
+    {
+        $track=Order::where('transaction_id',$request->code)->first();
+        if ($track) {
+            return view('pages.track',compact('track'));
+        }else{
+            $notification=array(
+                'messege'=>'Order id invalid ',
+                'alert-type'=>'error'
+            );
+            return Redirect()->back()->with($notification);
+        }
 
+    }
+
+    //contact us
+    public function contact(){
+        return view('pages.contact');
+    }
+
+    public function addFeedback(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'message' => 'required',
+        ]);
+
+        $feedback = new feedback();
+        $feedback->name = $request->name;
+        $feedback->email = $request->email;
+        $feedback->message = $request->message;
+        $feedback->save();
+
+        $notification=array(
+            'messege'=>'Thank you for your feedback',
+            'alert-type'=>'success'
+        );
+        return Redirect()->back()->with($notification);
+    }
+
+    public function profile(){
+        $order=Order::where('userId',Auth::id())->orderBy('id','DESC')->limit(10)->get();
+        return view('pages.profile',compact('order'));
+    }
 
 }

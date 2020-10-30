@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use Illuminate\Http\Request;
 use Auth;
 class HomeController extends Controller
@@ -72,5 +73,21 @@ class HomeController extends Controller
              return Redirect()->route('login')->with($notification);
 
 
+    }
+
+    public function SuccessList()
+    {
+        $order=Order::where('userId',Auth::id())->where('status',"deleveryprogress")->orderBy('id','DESC')->limit(10)->get();
+        return view('pages.returnorder',compact('order'));
+    }
+
+    public function RequestReturn($id)
+    {
+        Order::where('id',$id)->update(['return_order'=>1]);
+        $notification=array(
+            'messege'=>'Order Return request done please wait for our confirmation email',
+            'alert-type'=>'success'
+        );
+        return Redirect()->back()->with($notification);
     }
 }

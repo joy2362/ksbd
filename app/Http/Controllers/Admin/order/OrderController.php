@@ -64,4 +64,18 @@ class OrderController extends Controller
         return Redirect()->route('all-order')->with($notification);
     }
 
+    public function return(){
+        $orders=Order::where('return_order','!=',0)->get();
+        return view('admin.order.return_order',compact('orders'));
+    }
+
+    public function returnconfirm($id){
+        Order::where('id',$id)->update(['return_order'=>2]);
+        $notification=array(
+            'messege'=>'Order Return accept',
+            'alert-type'=>'success'
+        );
+        return Redirect()->back()->with($notification);
+    }
+
 }
