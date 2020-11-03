@@ -30,8 +30,7 @@ Route::get('add/wishlist/{id}', 'CartController@addwishlist');
 Route::get('add/cart/{id}', 'CartController@addcart');
 Route::get('cart', 'CartController@showCart');
 Route::get('checkout', 'CartController@showCheckout');
-Route::post('payment', 'PaymentController@payment');
-
+//Route::post('payment', 'PaymentController@payment');
 
 Route::get('coupon/remove', 'CartController@CouponRemove');
 Route::post('update/cart', 'CartController@updateCart');

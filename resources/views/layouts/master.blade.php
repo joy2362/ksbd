@@ -75,127 +75,20 @@
                             </div>
                         </div>
                         <!--end order tracking  modal-->
-                        <!--login modal-->
-                        <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="login" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="login">Login</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row text-center mb-10">
-                                            <div class="col-sm-12">
-                                                <h4>Login with </h4>
-                                            </div>
-                                        </div>
-                                        <div class="row text-center mb-15">
-                                            <div class="col-sm-12">
-                                                <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-primary">Facebook</a>
-                                                <a href="{{ url('/auth/redirect/google') }}" class="btn btn-success">Google</a>
-                                            </div>
-                                        </div>
-                                       <form method="post" action="{{route('login')}}">
-                                           <div class="row text-center mb-10">
-                                               <div class="col-sm-12">
-                                                   <h4>Or </h4>
-                                               </div>
-                                           </div>
-                                           @csrf
-                                           <div class="form-group">
-                                               <label for="email">Email address</label>
-                                               <input type="email" class="form-control"  name="email" value="{{ old('email') }}" autofocus>
-                                           </div>
-                                           <div class="form-group">
-                                               <label for="password">Password</label>
-                                               <input type="password" class="form-control"  name="password">
-                                           </div>
-                                           <div class="form-group">
-                                               <a href="{{ route('password.request') }}">
-                                                   Forgot password?
-                                               </a>
-                                           </div>
-                                       </form>
-                                    </div>
-                                    <!-- Modal footer -->
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger float-right" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-info">Login</button>
-                                        </div>
 
-                                </div>
-                            </div>
-                        </div>
-                        <!--end login modal-->
-                        <!--reg modal-->
-                        <div class="modal fade" id="reg" tabindex="-1" role="dialog" aria-labelledby="reg" aria-hidden="true">
-                            <div class="modal-dialog  modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button  data-dismiss="modal" class="close"  aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <h4 class="modal-title" id="login">Registation</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row text-center mb-10">
-                                            <div class="col-sm-12">
-                                                <h4>Sign up with </h4>
-                                            </div>
-                                        </div>
-                                        <div class="row text-center mb-15">
-                                            <div class="col-sm-12">
-                                                <a href="{{ url('/auth/redirect/facebook') }}" class="btn btn-primary">Facebook</a>
-                                                <a href="{{ url('/auth/redirect/google') }}" class="btn btn-success">Google</a>
-                                            </div>
-                                        </div>
-                                        <form method="post" action="{{ route('register') }}" >
-                                            <div class="row text-center mb-10">
-                                                <div class="col-sm-12">
-                                                    <h4>Or </h4>
-                                                </div>
-                                            </div>
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="name">Full Name</label>
-                                                <input type="name" class="form-control" id="name" name="name" value="{{ old('name') }}" autofocus>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email">Email address</label>
-                                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" autofocus>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="phone">Phone</label>
-                                                <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" autofocus>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="password">Password</label>
-                                                <input type="password" class="form-control" id="password" name="password">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="password_confirmation">Confirm Password</label>
-                                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger float-right" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-info">Sign up</button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <!--end registaion modal-->
-                        <a href="#" data-toggle="modal" data-target="#order">Track Order</a>
                         @guest
-                            <a href="#" data-toggle="modal" data-target="#login">Login</a>
-                            <a href="#" data-toggle="modal" data-target="#reg">Regiser</a>
+                            <a href="{{url('login')}}">Login</a>
+                            <a href="{{route('register')}}" >Regiser</a>
+
                         @else
+                            <!--
+                            <a href="{{route('password.change')}}" >Regiser</a>
+                            -->
                             <div class="btn-group ps-dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}<i class="fa fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{url('profile')}}">Profile</a></li>
                                     <li><a href="#">Setting</a></li>
+                                    <li><a href="{{ url('wishlist') }}">Whishlist</a></li>
                                     <li> <a class="dropdown-item" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
@@ -207,7 +100,7 @@
                                         </form></li>
                                 </ul>
                             </div>
-                            <a href="{{ url('wishlist') }}">Whishlist</a>
+
                         @endguest
                         <a href="{{ url('compare') }}">Compare</a>
 
@@ -247,8 +140,10 @@
 </header>
 @if ($coupon)
     <div class="header-services">
-        <div class="ps-services " data-owl-auto="true" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-mousedrag="on" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-loop="true" data-owl-item="1" data-owl-dots="false" data-owl-speed="7000" data-owl-nav="true"   data-owl-gap="0">
-            <p class="ps-service"><strong>Coupon</strong>: Use {{$coupon->code}} And Get {{$coupon->discount}}% Off</p>
+            <div class="ps-services owl-slider" data-owl-auto="true" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-mousedrag="on" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-loop="true" data-owl-item="1" data-owl-dots="false" data-owl-speed="7000" data-owl-nav="true"   data-owl-gap="0">
+            @foreach($coupon as $row)
+                <p class="ps-service"><strong>Coupon</strong>: Use {{$row->code}} And Get {{$row->discount}}% Off</p>
+            @endforeach
         </div>
     </div>
 @endif
@@ -326,7 +221,7 @@
                             </header>
                             <footer>
                                 <ul class="ps-list--line">
-                                    <li><a href="#">Order Status</a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#order">Order Status</a></li>
                                     <li><a href="#">Shipping and Delivery</a></li>
                                     <li><a href="#">Returns</a></li>
                                     <li><a href="#">Payment Options</a></li>
@@ -335,6 +230,7 @@
                             </footer>
                         </aside>
                     </div>
+
                     <!--
                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12 ">
                         <aside class="ps-widget--footer ps-widget--link">
@@ -511,7 +407,5 @@
         }
     })
 </script>
-
-
 </body>
 </html>

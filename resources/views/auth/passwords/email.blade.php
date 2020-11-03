@@ -1,30 +1,28 @@
-@extends('layouts.master_form')
-
-@section('form')
-    <form class="login100-form validate-form" action="{{ route('password.email') }}" method="post">
-        @csrf
-        <span class="login100-form-title p-b-49">
-                {{ __('Reset Password') }}
-            </span>
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
-        <div class="wrap-input100 validate-input m-b-23" data-validate = "E-mail is reauired">
-            <span class="label-input100">{{ __('E-Mail Address') }}</span>
-            <input class="input100" type="email" name="email" value="{{ old('email') }}" autofocus placeholder="Type your E-mail Address">
-            <span class="focus-input100" data-symbol="&#xf206;"></span>
-        </div>
-
-        <div class="container-login100-form-btn">
-            <div class="wrap-login100-form-btn">
-                <div class="login100-form-bgbtn"></div>
-                <button class="login100-form-btn">
-                    {{ __('Send Password Reset Link') }}
-                </button>
+@extends('layouts/master')
+@section('content')
+    <div class="container mt-30 ">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class=" col-sm-12 col-md-4">
+                <div class="card">
+                    <h2 class="card-header text-center mb-30">
+                        {{ __('Reset Password') }}
+                    </h2>
+                    <form action="{{ route('password.email') }}" method="post">
+                        @csrf
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        <div class="form-group mt-20">
+                            <input type="email" value="{{ old('email') }}" autofocus  placeholder="Email" name="email" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-info">{{ __('Send Password Reset Link') }}</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </form>
+    </div>
 @endsection
 
