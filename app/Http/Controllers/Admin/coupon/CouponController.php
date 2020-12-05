@@ -13,7 +13,7 @@ class CouponController extends Controller
     }
     //view coupons
     public function coupons(){
-        $coupon=Coupon::all();
+        $coupon=Coupon::where('newsletter','0')->get();
         return view('admin.coupon.coupon',compact('coupon'));
     }
 
@@ -21,20 +21,34 @@ class CouponController extends Controller
     public  function  storecoupon(Request $request){
         $validatedData = $request->validate([
             'code' => 'required|unique:coupons|max:10|min:3',
-            'discount' => 'required |integer | between:1,95',
+            'amount' => 'required_if:discount,null',
+            'limit' => 'required|integer',
+            'discount' => 'required_if:amount,null',
             'status' => 'required',
         ]);
-        //Eloquent orm
-        $coupon=new Coupon();
-        $coupon->code=$request->code;
-        $coupon->discount=$request->discount;
-        $coupon->status=$request->status;
-        $coupon->save();
-        $notification=array(
-            'messege'=>'Coupon Saved Successfully!',
-            'alert-type'=>'success'
-        );
-        return Redirect()->back()->with($notification);
+            if (!$request->amount && !$request->discount ){
+                $notification=array(
+                    'messege'=>'Discount or amount required!',
+                    'alert-type'=>'error'
+                );
+                return Redirect()->back()->with($notification);
+            }
+            $coupon=new Coupon();
+            $coupon->code=$request->code;
+            if ($request->discount){
+                $coupon->discount=$request->discount;
+            }
+            if ($request->amount){
+                $coupon->amount=$request->amount;
+            }
+            $coupon->limit=$request->limit;
+            $coupon->status=$request->status;
+            $coupon->save();
+            $notification=array(
+                'messege'=>'Coupon Saved Successfully!',
+                'alert-type'=>'success'
+            );
+            return Redirect()->back()->with($notification);
     }
 
     //edit coupon
@@ -47,25 +61,44 @@ class CouponController extends Controller
     public  function updatecoupon(Request $request){
         $validatedData = $request->validate([
             'code' => 'required|max:10|min:3',
-            'discount' => 'required |integer | between:1,95',
+            'amount' => 'required_if:discount,null ',
+            'limit' => 'required|integer',
+            'discount' => 'required_if:amount,null  ',
             'status' => 'required',
         ]);
-        $coupon = new Coupon();
-        $update=$coupon::where('id', $request->id)->update(['code' => $request->code ,'discount'=>$request->discount , 'status'=>$request->status]);
 
-        if ($update){
+        if (!$request->amount && !$request->discount ){
             $notification=array(
-                'messege'=>'Coupon Updated Successfully!',
-                'alert-type'=>'success'
-            );
-            return Redirect()->route('coupons')->with($notification);
-        }else{
-            $notification=array(
-                'messege'=>'Somthing Wrong!',
+                'messege'=>'Discount or amount required!',
                 'alert-type'=>'error'
             );
             return Redirect()->back()->with($notification);
         }
+
+        $coupon =  Coupon::where('id', $request->id)->first();
+
+        if($coupon->amount){
+            if ($request->amount){
+                Coupon::where('id', $request->id)->update(['code' => $request->code ,'amount'=>$request->amount ,'limit'=>$request->limit, 'status'=>$request->status]);
+            }
+            if ($request->discount){
+                Coupon::where('id', $request->id)->update(['code' => $request->code ,'discount'=>$request->discount ,'limit'=>$request->limit,'amount'=>null, 'status'=>$request->status]);
+            }
+        }
+        if ($coupon->discount){
+            if ($request->amount){
+                Coupon::where('id', $request->id)->update(['code' => $request->code ,'amount'=>$request->amount ,'limit'=>$request->limit,'discount'=>null, 'status'=>$request->status]);
+            }
+            if ($request->discount){
+                Coupon::where('id', $request->id)->update(['code' => $request->code ,'discount'=>$request->discount ,'limit'=>$request->limit, 'status'=>$request->status]);
+            }
+        }
+
+        $notification=array(
+            'messege'=>'Coupon Updated Successfully!',
+            'alert-type'=>'success'
+        );
+        return Redirect()->route('coupons')->with($notification);
     }
 
     //delete a coupon

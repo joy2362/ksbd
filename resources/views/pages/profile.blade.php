@@ -50,7 +50,7 @@
                     @if(Auth::user()->avatar)
                         <img src="{{ asset(Auth::user()->avatar) }}" class="card-img-top " style="height: 90px; width: 90px; margin-left: 34%;" >
                     @else
-                        <img src="{{ asset('public/avatar.jpg') }}" class="card-img-top" style="height: 90px; width: 90px; margin-left: 34%;" >
+                        <img src="{{ asset('public/media/user/profile.jpg') }}" class="card-img-top" style="height: 90px; width: 90px; margin-left: 34%;" >
                     @endif
                     <div class="card-body mt-30">
                         <h4 class="card-title">{{ Auth::user()->name }}</h4>

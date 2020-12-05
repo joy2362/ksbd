@@ -1685,7 +1685,7 @@ textarea.form-control {
   margin-bottom: 10px;
   height: auto; }
   .br-theme-fontawesome-stars .br-widget > a {
-    font-size: 12px !important;
+    font-size: 20px !important;
     color: #ffb727; }
 
 .ps-post__actions span, .ps-post__actions .ps-post__social {
@@ -3130,6 +3130,7 @@ textarea.form-control {
       .ps-review header p a {
         font-weight: 700;
         color: #2AC37D; }
+
   @media (max-width: 767px) {
     .ps-review .ps-review__thumbnail {
       margin-bottom: 20px;
@@ -6529,4 +6530,7 @@ html .bg--parallax {
 .paymentGatewayLogo{
     max-width: 50px;
     background-color: #fff;
+}
+.productRating{
+    font-size: 20px;
 }

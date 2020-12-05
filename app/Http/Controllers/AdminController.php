@@ -31,7 +31,7 @@ class AdminController extends Controller
     public function index()
     {
         $today=Order::whereDate('order_at', now())->sum('amount');
-        $month=Order::whereMonth('order_at','=',now())->sum('amount');
+        $month=Order::whereMonth('order_at', now())->sum('amount');
         $year=Order::whereYear('order_at','=',now())->sum('amount');
         $delevery=Order::whereDate('order_at', now())->where('status','done')->sum('amount');
         $product=Product::count();

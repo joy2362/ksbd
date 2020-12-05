@@ -1,6 +1,7 @@
 @extends('layouts/master')
 
 @section('content')
+
     <div class="test">
         <div class="container">
             <div class="row">
@@ -25,13 +26,14 @@
                                 @if($product->img_3)
                                     <div class="item"><img src="{{asset($product->img_3)}}" alt=""></div>
                                 @endif
-                            </div>
                                 @if($product->video_link)
-                                        <a class="popup-youtube ps-product__video" href="{{url($product->video_link)}}">
-                                            <img src="{{asset($product->img_1)}}" alt="">
-                                            <i class="fa fa-play"></i>
-                                        </a>
+                                    <a class="popup-youtube ps-product__video" href="{{url($product->video_link)}}">
+                                        <img src="{{asset($product->img_1)}}" alt="">
+                                        <i class="fa fa-play"></i>
+                                    </a>
                                 @endif
+                            </div>
+
                         </div>
                         <div class="ps-product__image">
                             <div class="item">
@@ -47,6 +49,7 @@
                                     <img class="zoom" src="{{asset($product->img_3)}}" alt="" data-zoom-image="{{asset($product->img_3)}}">
                                 </div>
                             @endif
+
                         </div>
                     </div>
                     <div class="ps-product__thumbnail--mobile">
@@ -59,17 +62,24 @@
                             @if($product->img_3)
                                 <img src="{{asset($product->img_3)}}" alt="">
                             @endif
+                            @if($product->video_link)
+                                <a class="popup-youtube ps-product__video" href="{{url($product->video_link)}}">
+                                    <img src="{{asset($product->img_1)}}" alt="">
+                                    <i class="fa fa-play"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="ps-product__info">
                         <div class="ps-product__rating">
-                            <select class="ps-rating">
-                                <option value="1">1</option>
-                                <option value="1">2</option>
-                                <option value="1">3</option>
-                                <option value="1">4</option>
-                                <option value="2">5</option>
-                            </select>
+                            @for( $i=1;$i<=5;$i++)
+                                @if($i <= $rating)
+                                    <span class="fa fa-star productRating" style="color: #f97d00;font-size: 20px "></span>
+                                @else
+                                    <span class="fa fa-star productRating" style="font-size: 20px;color: #9d9d9d"></span>
+                                @endif
+                            @endfor
+                            <label>{{" (".number_format($rating,2) . "  / 5)"}}</label>
                         </div>
                         <h1>{{$product->product_name}}</h1>
                         @if($product->discount_price)
@@ -120,7 +130,75 @@
                         </div>
 
                         <div class="tab-pane" role="tabpanel" id="tab_04">
-                            <div class="fb-comments" data-href="{{Request::url()}}" data-numposts="10" data-width=""></div>
+                            <p class="mb-20">{{$totalReview}} review for <strong>{{$product->product_name}}</strong></p>
+                           @foreach($comments as $row)
+                            <div class="ps-review">
+                                @if($row->user->avatar)
+                                <div class="ps-review__thumbnail"><img src="{{$row->user->avatar}}" alt=""></div>
+                                @else
+                                    <div class="ps-review__thumbnail"><img src="{{ asset('public/media/user/profile.jpg') }}" alt=""></div>
+                                @endif
+                                    <div class="ps-review__content">
+                                    <header>
+                                        @for( $i=1;$i<=5;$i++)
+                                            @if($i<=$row->rating)
+                                                <span class="fa fa-star productRating" style="color: #f97d00;font-size: 15px "></span>
+                                            @else
+                                                <span class="fa fa-star " style="font-size: 15px;color: #9d9d9d"></span>
+                                            @endif
+                                        @endfor
+                                        <p>By <span style="color: #2ac37d;font-weight: bold">{{$row->user->name}}</span>  - {{\Carbon\Carbon::parse($row->updated_at)->isoFormat('MMMM D, YYYY')}}</p>
+                                    </header>
+                                    <p>{{$row->comment}}</p>
+                                        @php
+                                          $images = DB::table('review_images')->where('review_id',$row->id)->get()
+                                        @endphp
+                                        @if($images)
+                                            @foreach($images as $row)
+                                                <a target="_blank" href="{{asset($row->image)}}">
+                                                    <img src="{{asset($row->image)}}" style="height: 100px;width: 100px">
+                                                </a>
+
+                                            @endforeach
+                                        @endif
+                                </div>
+                            </div>
+                            @endforeach
+                            {{ $comments->links() }}
+                            @if(auth()->check())
+                            <form class="ps-product__review" action="{{url('product/comment/add')}}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <h4>ADD YOUR REVIEW</h4>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
+                                        <div class="form-group">
+                                            <label>Your rating<span></span></label>
+                                            <select class="ps-rating" name="rating" >
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3" selected>3</option>
+                                                <option value="4">4</option>
+                                                <option value="5" >5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 ">
+                                        <div class="form-group">
+                                            <label>Your Review:</label>
+                                            <textarea class="form-control" rows="6" name="review"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Your Review:</label>
+                                           <input type="file" multiple accept="image/*" name="reviewImage[]">
+                                        </div>
+                                        <input type="hidden" name="product" value="{{$product->id}}">
+                                        <div class="form-group">
+                                            <button class="ps-btn ps-btn--sm">Submit<i class="ps-icon-next"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                                @endif
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 //frontend
 //home
 Route::get('/', 'FrontendCrontroller@index')->name('index');
+Route::post('/pdf', 'FrontendCrontroller@pdf');
 
 //feedback
 Route::get('contact', 'FrontendCrontroller@contact');
@@ -30,7 +31,6 @@ Route::get('add/wishlist/{id}', 'CartController@addwishlist');
 Route::get('add/cart/{id}', 'CartController@addcart');
 Route::get('cart', 'CartController@showCart');
 Route::get('checkout', 'CartController@showCheckout');
-//Route::post('payment', 'PaymentController@payment');
 
 Route::get('coupon/remove', 'CartController@CouponRemove');
 Route::post('update/cart', 'CartController@updateCart');
@@ -54,6 +54,10 @@ Route::get('/blog-details/{id}', 'BlogController@singleBlog');
 
 //product
 Route::get('product-details/{id}', 'FrontendCrontroller@product_details');
+
+//comment section
+//product
+Route::post('product/comment/add', 'CommentController@productComment');
 
 //login with facebook and google
 Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
@@ -174,7 +178,6 @@ Route::get('admin/order/delevery/done/{id}', 'Admin\order\OrderController@Deleve
 //return order
 Route::get('admin/order/return', 'Admin\order\OrderController@return')->name('return-order');
 Route::get('admin/order/return/confirm/{id}', 'Admin\order\OrderController@returnconfirm');
-
 
 
 // SSLCOMMERZ Start

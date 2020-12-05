@@ -20,6 +20,14 @@
                         <input type="text" class="form-control " id="discount" name="discount" value="{{$coupon->discount}}">
                     </div>
                     <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="text" class="form-control " id="amount" name="amount" value="{{$coupon->amount}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="limit">Limit</label>
+                        <input type="text" class="form-control " id="limit" name="limit" value="{{$coupon->limit}}">
+                    </div>
+                    <div class="form-group">
                         <label>Status</label>
                         <div class="form-check-inline">
                             <label class="form-check-label">

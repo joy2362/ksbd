@@ -121,23 +121,39 @@ class CartController extends Controller
         $check = Coupon::where('status','1')->where('code',$request->coupon)->first();
 
         if ($check){
-            $item=Cart::content();
-            $total=0;
-            foreach ($item as $row){
-                $total+=$row->price *$row->qty;
-            }
-            $discount=($total * $check->discount ) /100;
+            if ($check->limit <= $check->used){
+                $notification=array(
+                    'messege'=>'Coupon maximum limit reached',
+                    'alert-type'=>'error'
+                );
+                return redirect()->back()->with($notification);
+            }else{
+                $item=Cart::content();
+                $total=0;
+                foreach ($item as $row){
+                    $total+=$row->price *$row->qty;
+                }
+                if ($check->discount){
+                    $discount=($total * $check->discount ) /100;
+                }
+                if ($check->amount){
+                    $discount = $check->amount ;
+                }
 
-            session::put('coupon',[
-                'name' => $check->code,
-                'discount' =>$discount,
-                'balance' => $total - $discount
-            ]);
-            $notification=array(
-                'messege'=>'Successfully Coupon Applied',
-                'alert-type'=>'success'
-            );
-            return redirect()->back()->with($notification);
+                session::put('coupon',[
+                    'name' => $check->code,
+                    'discount' =>$discount,
+                    'balance' => $total - $discount
+                ]);
+                $check->used = $check->used + 1;
+                $check->save();
+
+                $notification=array(
+                    'messege'=>'Successfully Coupon Applied',
+                    'alert-type'=>'success'
+                );
+                return redirect()->back()->with($notification);
+            }
         }else{
             $notification=array(
                 'messege'=>'Invalid Coupon',
@@ -149,6 +165,9 @@ class CartController extends Controller
 
     public function CouponRemove()
     {
+        $check = Coupon::where('status','1')->where('code',Session::get('coupon')['name'])->first();
+        $check->used = $check->used - 1;
+        $check->save();
         session::forget('coupon');
         return redirect()->back();
     }

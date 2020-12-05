@@ -4,11 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-
-class Coupon extends Model
+class ReviewImage extends Model
 {
     protected $fillable = [
-        'code', 'discount','status','amount','limit','used','newsletter'
+        'review_id','image'
     ];
-
 }

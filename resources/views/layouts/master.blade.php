@@ -1,3 +1,8 @@
+@php
+    $siteinfo=App\SiteDetails::where('id',1)->get();
+           $coupon = App\Coupon::where('status','1')->orderby('id','desc')->get();
+@endphp
+
 <!DOCTYPE html>
 <!--[if IE 7]><html class="ie ie7"><![endif]-->
 <!--[if IE 8]><html class="ie ie8"><![endif]-->
@@ -79,7 +84,6 @@
                         @guest
                             <a href="{{url('login')}}">Login</a>
                             <a href="{{route('register')}}" >Regiser</a>
-
                         @else
                             <!--
                             <a href="{{route('password.change')}}" >Regiser</a>
@@ -97,18 +101,18 @@
 
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             @csrf
-                                        </form></li>
+                                        </form>
+                                    </li>
                                 </ul>
                             </div>
 
                         @endguest
                         <a href="{{ url('compare') }}">Compare</a>
-
                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <nav class="navigation">
         <div class="container-fluid">
             <div class="navigation__column left">
@@ -138,7 +142,8 @@
         </div>
     </nav>
 </header>
-@if ($coupon)
+
+@if(!$coupon)
     <div class="header-services">
             <div class="ps-services owl-slider" data-owl-auto="true" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-mousedrag="on" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-loop="true" data-owl-item="1" data-owl-dots="false" data-owl-speed="7000" data-owl-nav="true"   data-owl-gap="0">
             @foreach($coupon as $row)
@@ -163,7 +168,7 @@
                     </form>
                 </div>
                 <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12 ">
-                    <p>...and receive Exclusive news.</p>
+                    <p>...and receive a 5% discount coupon.</p>
                 </div>
             </div>
         </div>
@@ -179,7 +184,6 @@
                             </header>
                             <footer>
                                 <p>{!! $siteinfo[0]->about!!} </p>
-
                             </footer>
                         </aside>
                     </div>
