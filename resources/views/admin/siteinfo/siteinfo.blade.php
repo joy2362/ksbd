@@ -45,6 +45,16 @@
                                 <label class="form-control-label">Instagram: {{$setting->instagram_link}}</label>
                             </div>
                         </div><!-- col-6 -->
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Delivery Cost(Inside Dhaka): {{$setting->shiping_cost_inside_dhaka}} BDT</label>
+                            </div>
+                        </div><!-- col-6 -->
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Delivery Cost(OutSide Dhaka): {{$setting->shiping_cost_outside_dhaka}} BDT</label>
+                            </div>
+                        </div><!-- col-6 -->
                         <div class="col-lg-12">
                             <div class="form-group mg-b-10-force">
                                 <label class="form-control-label">About: </label>
@@ -97,7 +107,7 @@
                                     <input type="text" class="form-control " id="facebook_link" name="facebook_link" value="{{$setting->facebook_link}}">
                                 </div>
 
-                                <div class="form-group col-sm-4">
+                                <div class="form-group col-sm-6">
                                     <label for="instagram_link">Instagram</label>
                                     <input type="text" class="form-control " id="instagram_link" name="instagram_link" value="{{$setting->instagram_link}}">
                                 </div>
@@ -105,6 +115,14 @@
                                     <label for="logo">Logo</label>
                                     <input type="file" class="form-control" name="logo">
                                     <input type="hidden" class="form-control" name="oldlogo" value="{{$setting->logo}}">
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="instagram_link">Delivery cost(Inside Dhaka)</label>
+                                    <input type="text" class="form-control " id="instagram_link" name="shiping_cost_inside_dhaka" value="{{$setting->shiping_cost_inside_dhaka}}">
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="instagram_link">Delivery cost(Outside Dhaka)</label>
+                                    <input type="text" class="form-control " id="instagram_link" name="shiping_cost_outside_dhaka" value="{{$setting->shiping_cost_outside_dhaka}}">
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">

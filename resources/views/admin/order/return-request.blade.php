@@ -30,14 +30,14 @@
                                 <td>{{$row->amount}}</td>
                                 <td>{{\Carbon\Carbon::parse($row->created_at)->format('d-m-Y')}}</td>
                                 @if($row->status == "5")
-                                    <td><span class="badge badge-primary">Pending</span>
-                                    </td>
+                                <td><span class="badge badge-primary">Pending</span>
+                                </td>
                                 @elseif($row->status == "6")
                                     <td><span class="badge badge-success">Success</span></td>
                                 @endif
                                 <td>
                                     @if($row->status == "5")
-                                        <a href="{{ url('admin/order/return/confirm/'.$row->id) }}" class="btn btn-sm btn-danger" id="delete">Accept Return</a>
+                                    <a href="{{ url('admin/order/return/confirm/'.$row->id) }}" class="btn btn-sm btn-danger" id="delete">Accept Return</a>
                                     @endif
                                     <a href="{{url("admin/order/view/".$row->id)}}" class=" btn btn-sm btn-success" >View</a>
                                 </td>

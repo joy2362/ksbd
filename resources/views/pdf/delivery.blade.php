@@ -49,36 +49,65 @@
 </head>
 
 <body>
+@php
+$count = 0;
+@endphp
+@foreach($order as $row)
+    @if($count == 2)
+        <div class="page-break "></div>
+        @php
+            $count = 0;
+        @endphp
+    @endif
 <div class="invoice-box">
     <table cellpadding="0" cellspacing="0">
         <tr>
             <td class="invoice"  colspan="5">
                 <p class="name">Korean Shop Bangladesh</p>
-                <p class="address">House no : 159 , 6th floor sunil para ,Vashantek, Dhaka- 1206</p>
+                <p class="address">{{$site->address}}</p>
             </td>
         </tr>
         <tr>
             <td  ></td>
-            <td class="contact" colspan="2">Contact: 01759588464</td>
+            <td class="contact" colspan="3">Contact: {{$site->phone_1}}</td>
             <td style="text-align: center" colspan="2">Date: @php echo  date(" M  d, Y") @endphp</td>
         </tr>
 
         <tr class="info">
-            <td colspan="5">Name: Abdullah zahid</td>
+            <td colspan="5">Name: {{$row->name}}</td>
         </tr>
         <tr class="info">
-            <td colspan="5">Address:  145/3-1, matikhata dhaka cantonment dhaka-1206</td>
+            <td colspan="5">Address:  {{$row->address}}</td>
         </tr>
         <tr class="info">
-            <td colspan="5">Contact no: 01780134797</td>
+            <td colspan="5">Contact no: {{$row->phone}}</td>
         </tr>
         <tr class="info">
-            <td colspan="5">Product: Cosrx nail essence+ green tea cleansing foam , Cosrx nail essence+ green tea cleansing foam</td>
+            @php
+                $details = DB::table('order_details')->where('order_Id',$row->id)->get();
+            @endphp
+
+            <td colspan="5">Product:
+                @php
+                $nameCount=1;
+                @endphp
+                @foreach($details as $orderDetails)
+                    @php
+                        $product = DB::table('products')->where('id',$orderDetails->product_id)->first();
+                    @endphp
+                    {{$product->product_name}}  @if($nameCount<count($details)) ,@endif
+                    @php
+                        $nameCount++;
+                        @endphp
+
+                @endforeach
+            </td>
+
         </tr>
         <tr class="info">
-            <td >Price: 250000 tk</td>
-            <td >D charge:15000 tk</td>
-            <td >T Price: 265000tk</td>
+            <td >Price: {{$row->amount - $row->delivery_cost}} tk</td>
+            <td >D charge:{{$row->delivery_cost}} tk</td>
+            <td >T Price: {{$row->amount}}tk</td>
             <td style="text-align: center">Paid: No</td>
         </tr>
 
@@ -91,45 +120,11 @@
     </table>
 
 </div>
-<div class="invoice-box">
-    <table cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="invoice"  colspan="5">
-                <p class="name">Korean Shop Bangladesh</p>
-                <p class="address">House no : 159 , 6th floor sunil para ,Vashantek, Dhaka- 1206</p>
-            </td>
-        </tr>
-        <tr>
-            <td  ></td>
-            <td class="contact" colspan="2">Contact: 01759588464</td>
-            <td style="text-align: center" colspan="2">Date: @php echo  date(" M  d, Y") @endphp</td>
-        </tr>
+    @php
+        $count =$count+1;
+    @endphp
 
-        <tr class="info">
-            <td colspan="5">Name: Abdullah zahid</td>
-        </tr>
-        <tr class="info">
-            <td colspan="5">Address:  145/3-1, matikhata dhaka cantonment dhaka-1206</td>
-        </tr>
-        <tr class="info">
-            <td colspan="5">Contact no: 01780134797</td>
-        </tr>
-        <tr class="info">
-            <td colspan="5">Product: Cosrx nail essence+ green tea cleansing foam , Cosrx nail essence+ green tea cleansing foam</td>
-        </tr>
-        <tr class="info">
-            <td >Price: 2500 tk</td>
-            <td >D charge:150 tk</td>
-            <td colspan="2">T Price: 265000tk</td>
-            <td >Paid: No</td>
-        </tr>
-        <tr>
-            <td class="cod" colspan="5">
-                Cash on delivery
-            </td>
-        </tr>
-    </table>
-</div>
+@endforeach
 
 </body>
 </html>

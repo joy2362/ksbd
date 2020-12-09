@@ -9,8 +9,10 @@ use App\feedback;
 use App\Mail\newsletterCoupon;
 use App\MainSlider;
 use App\Order;
+use App\orderDetails;
 use App\Product;
 use App\ProductComment;
+use App\SiteDetails;
 use DB;
 use App\Wishlist;
 use Illuminate\Http\Request;
@@ -21,7 +23,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Mail;
-use PDF;
+
 
 class FrontendCrontroller extends Controller
 {
@@ -97,10 +99,17 @@ class FrontendCrontroller extends Controller
         $skintype=$product->skin_type_id;
         $rating = ProductComment::where('product_id',$id)->avg('rating');
         $totalReview = ProductComment::where('product_id',$id)->count();
-        $comments = ProductComment::where('product_id',$id)->paginate(1);
-        //dd($comment);
+        $comments = ProductComment::where('product_id',$id)->paginate(10);
         $skintypeProduct=Product::where('skin_type_id',$skintype)->take(8)->get();
-        return view('pages.product-details')->with(compact('product','skintypeProduct','comments','rating','totalReview'));
+
+        if (Auth::check()){
+            $order = orderDetails::where('product_id',$id)->where('userId',Auth::id())->first();
+            $userComment = ProductComment::where('product_id',$id)->where('user_id',Auth::id())->first();
+            return view('pages.product-details')->with(compact('product','skintypeProduct','comments','rating','totalReview','order','userComment'));
+
+        }else{
+            return view('pages.product-details')->with(compact('product','skintypeProduct','comments','rating','totalReview'));
+        }
     }
 
     public function showWishlist(){
@@ -124,10 +133,15 @@ class FrontendCrontroller extends Controller
         return Redirect()->back()->with($notification);
 
     }
+    public function OrderTrack()
+    {
+        return view('pages.track');
+
+    }
 
     public function OrderTracking(Request $request)
     {
-        $track=Order::where('transaction_id',$request->code)->first();
+        $track=Order::where('order_Id',$request->code)->first();
         if ($track) {
             return view('pages.track',compact('track'));
         }else{
@@ -165,14 +179,4 @@ class FrontendCrontroller extends Controller
         return Redirect()->back()->with($notification);
     }
 
-    public function profile(){
-        $order=Order::where('userId',Auth::id())->orderBy('id','DESC')->limit(10)->get();
-        return view('pages.profile',compact('order'));
-    }
-    public function pdf(Request  $request){
-
-        dd($request);
-        $pdf = PDF::loadView('pdf.delivery');
-        return $pdf->stream();
-    }
 }

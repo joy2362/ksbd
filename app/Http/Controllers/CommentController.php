@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PostComment;
 use App\ProductComment;
 use App\ReviewImage;
 use Illuminate\Http\Request;
@@ -56,5 +57,23 @@ class CommentController extends Controller
 
         }
 
+    }
+
+    public function postComment (Request $request){
+        $validatedData = $request->validate([
+            'comment' => 'required',
+        ]);
+
+       $comment = new PostComment();
+       $comment->post_id = $request->postId;
+       $comment->comment = $request->comment;
+       $comment->user_id = Auth::id();
+       $comment->save();
+
+        $notification=array(
+            'messege'=>'Comment Added',
+            'alert-type'=>'success'
+        );
+        return Redirect()->back()->with($notification);
     }
 }

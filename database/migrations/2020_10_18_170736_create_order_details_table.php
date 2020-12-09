@@ -18,9 +18,9 @@ class CreateOrderDetailsTable extends Migration
             $table->bigInteger('userId');
             $table->string('product_id');
             $table->string('quantity');
-            $table->string('singleprice');
-            $table->string('totalprice');
-            $table->string('trans_id');
+            $table->float('unit_price');
+            $table->float('total_price');
+            $table->string('order_Id');
             $table->timestamps();
         });
     }

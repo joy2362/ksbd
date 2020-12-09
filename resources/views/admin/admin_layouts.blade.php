@@ -67,18 +67,23 @@
                 <li class="nav-item"><a href="{{route('add.product')}}" class="nav-link">Add Product</a></li>
                 <li class="nav-item"><a href="{{route('view.product')}}" class="nav-link">All Product</a></li>
             </ul>
-            <a href="{{url('admin/order/all')}}" class="sl-menu-link {{ (request()->is('admin/order*')) ? 'active' : '' }}">
+            <a href="#" class="sl-menu-link {{ (request()->is('admin/order*')) ? 'active' : '' }}">
                 <div class="sl-menu-item">
-                    <i class="menu-item-icon icon ion-ios-email-outline tx-24"></i>
+                    <i class="menu-item-icon icon ion-ios-gear-outline tx-24"></i>
                     <span class="menu-item-label">Order</span>
+                    <i class="menu-item-arrow fa fa-angle-down"></i>
                 </div><!-- menu-item -->
             </a><!-- sl-menu-link -->
-            <a href="{{url('admin/order/return')}}" class="sl-menu-link {{ (request()->is('admin/order/return')) ? 'active' : '' }}">
-                <div class="sl-menu-item">
-                    <i class="menu-item-icon icon ion-ios-email-outline tx-24"></i>
-                    <span class="menu-item-label">Return request</span>
-                </div><!-- menu-item -->
-            </a><!-- sl-menu-link -->
+            <ul class="sl-menu-sub nav flex-column">
+                <li class="nav-item"><a href="{{route('add.product')}}" class="nav-link">Add Order</a></li>
+                <li class="nav-item"><a href="{{route('today-order')}}" class="nav-link">Today's order</a></li>
+                <li class="nav-item"><a href="{{route('month-order')}}" class="nav-link">This month order</a></li>
+                <li class="nav-item"><a href="{{route('cancel-order')}}" class="nav-link">Canceled order</a></li>
+                <li class="nav-item"><a href="{{route('return-order')}}" class="nav-link">Return request</a></li>
+                <li class="nav-item"><a href="{{route('accept-return')}}" class="nav-link">Return Order</a></li>
+                <li class="nav-item"><a href="{{url('admin/order/all')}}" class="nav-link">All Order</a></li>
+            </ul>
+
             <a href="#" class="sl-menu-link {{ (request()->is('admin/post*')) ? 'active' : '' }}">
                 <div class="sl-menu-item">
                     <i class="menu-item-icon icon ion-ios-book-outline tx-24"></i>
@@ -101,6 +106,7 @@
             <ul class="sl-menu-sub nav flex-column">
                 <li class="nav-item"><a href="{{route('siteSetting')}}" class="nav-link">General</a></li>
                 <li class="nav-item"><a href="{{route('mainslider')}}" class="nav-link">Main Slider</a></li>
+                <li class="nav-item"><a href="{{route('database.backup')}}" class="nav-link">Database Backup</a></li>
             </ul>
             <a href="#" class="sl-menu-link  {{ (request()->is('admin/newsletter*')) ? 'active' : '' }}">
                 <div class="sl-menu-item">
@@ -161,6 +167,7 @@
 <script src="{{ asset('public/backend/lib/summernote/summernote-bs4.min.js') }}"></script>
 <script src="{{ asset('public/backend/js/starlight.js') }}"></script>
 <script src="{{ asset('public/backend/lib/medium-editor/medium-editor.js') }}"></script>
+<script src="{{ asset('public/backend/js/shiftMultiSelect.js') }}"></script>
 <script>
     $(function(){
         'use strict';
@@ -259,9 +266,9 @@
 </script>
 <script>
     @if ($errors->any())
-    @foreach ($errors->all() as $error)
-    toastr.error("{{ $error }}");
-    @endforeach
+        @foreach ($errors->all() as $error)
+            toastr.error("{{ $error }}");
+        @endforeach
     @endif
 </script>
 
@@ -269,9 +276,10 @@
     $(document).on("click", "#delete", function(e){
         e.preventDefault();
         var link = $(this).attr("href");
+
         swal({
-            title: "Are you Want to delete?",
-            text: "Once Delete, This will be Permanently Delete!",
+            title: "Are you sure?",
+            text: "You won't be able to revert this!!",
             icon: "warning",
             buttons: true,
             dangerMode: true,

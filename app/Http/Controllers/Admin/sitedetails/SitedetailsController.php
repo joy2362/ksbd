@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\SiteDetails;
 use Illuminate\Support\Str;
 use Image;
+use File;
+use Illuminate\Support\Facades\Storage;
 
 
 class SitedetailsController extends Controller
@@ -54,6 +56,12 @@ class SitedetailsController extends Controller
         if($request->instagram_link){
             $setting->instagram_link= $request->instagram_link;
         }
+        if($request->shiping_cost_inside_dhaka){
+            $setting->shiping_cost_inside_dhaka= $request->shiping_cost_inside_dhaka;
+        }
+        if($request->shiping_cost_outside_dhaka){
+            $setting->shiping_cost_outside_dhaka= $request->shiping_cost_outside_dhaka;
+        }
         $setting->save();
         $notification=array(
             'messege'=>'Setting changed Successfully!',
@@ -61,4 +69,29 @@ class SitedetailsController extends Controller
         );
         return Redirect()->back()->with($notification);
     }
+    public function DatabaseBackup()
+    {
+        return view('admin.siteinfo.database-backup')->with('files', File::allFiles('storage/app/Laravel'));
+    }
+
+    public function BackupNow()
+    {
+        \Artisan::call('backup:run',['--only-db'=>true]);
+        $notification=array(
+            'messege'=>'Successfully Database Backup ',
+            'alert-type'=>'success'
+        );
+        return Redirect()->back()->with($notification);
+    }
+
+    public function DeleteDatabase($getFilename)
+    {
+        Storage::delete('Laravel/'.$getFilename);
+        $notification=array(
+            'messege'=>'Successfully Backup Delete  ',
+            'alert-type'=>'success'
+        );
+        return Redirect()->back()->with($notification);
+    }
+
 }

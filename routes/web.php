@@ -3,14 +3,14 @@
 //frontend
 //home
 Route::get('/', 'FrontendCrontroller@index')->name('index');
-Route::post('/pdf', 'FrontendCrontroller@pdf');
+Route::get('/pdf', 'FrontendCrontroller@pdf');
 
 //feedback
 Route::get('contact', 'FrontendCrontroller@contact');
 Route::post('add/feedback', 'FrontendCrontroller@addFeedback');
 
 //user account
-Route::get('profile', 'FrontendCrontroller@profile');
+Route::get('profile', 'ProfileController@profile');
 
 //return order
 Route::get('return/list/','HomeController@SuccessList')->name('success.orderlist');
@@ -40,9 +40,17 @@ Route::post('coupon/apply', 'CartController@applyCouppon');
 Route::post('add/to/cart', 'CartController@insertcart');
 Route::get('remove/wishlist/{id}', 'FrontendCrontroller@removewishlist');
 Route::get('wishlist', 'FrontendCrontroller@showWishlist');
+Route::get('shipingcost/{value}', 'CartController@changeshipingcost');
 
-//order tracking
+//order
+Route::post('new/order', 'OrderController@add')->name('order.add');
+Route::get('cancel/order/{id}', 'OrderController@cancel')->name('order.cancel');
+Route::get('return/order/{id}', 'OrderController@return')->name('order.cancel');
+Route::get('order/{id}', 'OrderController@singleOrder');
+
+// tracking
 Route::post('order/tracking', 'FrontendCrontroller@OrderTracking')->name('order.tracking');
+Route::get('order/tracking', 'FrontendCrontroller@OrderTrack');
 
 //compare
 Route::get('add/compare/{id}', 'compareController@store');
@@ -58,15 +66,19 @@ Route::get('product-details/{id}', 'FrontendCrontroller@product_details');
 //comment section
 //product
 Route::post('product/comment/add', 'CommentController@productComment');
+//post
+Route::post('post/comment/add', 'CommentController@postComment')->name('post.comment.add');
 
 //login with facebook and google
 Route::get('/auth/redirect/{provider}', 'SocialController@redirect');
 Route::get('/callback/{provider}', 'SocialController@callback');
+
 //auth & user
 Auth::routes();
-Route::get('/password-change', 'HomeController@changePassword')->name('password.change');
-Route::post('/password-update', 'HomeController@updatePassword')->name('password.update');
-Route::get('/user/logout', 'HomeController@Logout')->name('user.logout');
+Route::get('/setting', 'ProfileController@changePassword')->name('profile.setting');
+Route::post('/password-update', 'ProfileController@updatePassword')->name('password.update');
+Route::post('/avatar-update', 'ProfileController@updateavatar')->name('avatar.update');
+Route::get('/user/logout', 'ProfileController@Logout')->name('user.logout');
 
 //admin=======
 Route::get('admin/home', 'AdminController@index');
@@ -165,19 +177,26 @@ Route::post('admin/siteinfo/update/mainslider', 'Admin\Slider\MainSliderControll
 Route::get('admin/siteinfo/sitedetails', 'Admin\sitedetails\SitedetailsController@siteinfo')->name('siteSetting');
 Route::post('admin/siteinfo/sitedetails', 'Admin\sitedetails\SitedetailsController@editsiteinfo')->name('editsiteSetting');
 
+//database backup
+Route::get('admin/database/backup', 'Admin\sitedetails\SitedetailsController@DatabaseBackup')->name('database.backup');
+Route::get('admin/database/backup/now', 'Admin\sitedetails\SitedetailsController@BackupNow')->name('admin.backup.now');
+Route::get('delete/database/{getFilename}', 'Admin\sitedetails\SitedetailsController@DeleteDatabase');
 //order
 Route::get('admin/order/all', 'Admin\order\OrderController@index')->name('all-order');
+Route::get('admin/order/today', 'Admin\order\OrderController@todayOrder')->name('today-order');
+Route::get('admin/order/month', 'Admin\order\OrderController@monthOrder')->name('month-order');
 Route::get('admin/order/return', 'Admin\order\OrderController@return')->name('return-order');
+Route::get('admin/order/cancel', 'Admin\order\OrderController@cancel')->name('cancel-order');
+Route::post('admin/order/status', 'Admin\order\OrderController@multiOperation');
 Route::get('admin/order/view/{id}', 'Admin\order\OrderController@show');
 
-Route::get('admin/order/accept/{id}', 'Admin\order\OrderController@PaymentAccept');
-Route::get('admin/order/cancel/{id}', 'Admin\order\OrderController@PaymentCancel');
-Route::get('admin/order/delevery/progress/{id}', 'Admin\order\OrderController@DeleveryProgress');
-Route::get('admin/order/delevery/done/{id}', 'Admin\order\OrderController@DeleveryDone');
+Route::get('admin/order/progress/{id}', 'Admin\order\OrderController@orderProgress');
+Route::get('admin/order/delivered/{id}', 'Admin\order\OrderController@Delevered');
+Route::get('admin/order/generate/pdf', 'Admin\order\OrderController@generatePdf')->name('generate-pdf');
 
 //return order
-Route::get('admin/order/return', 'Admin\order\OrderController@return')->name('return-order');
-Route::get('admin/order/return/confirm/{id}', 'Admin\order\OrderController@returnconfirm');
+Route::get('admin/order/return/accept', 'Admin\order\OrderController@returnAccept')->name('accept-return');
+Route::get('admin/order/return/confirm/{id}', 'Admin\order\OrderController@returnConfirm');
 
 
 // SSLCOMMERZ Start

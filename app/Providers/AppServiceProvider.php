@@ -1,11 +1,9 @@
 <?php
 
 namespace App\Providers;
-use Illuminate\Support\Facades\View;
-use App\SiteDetails;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use App\Coupon;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -25,9 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        $siteinfo=SiteDetails::where('id',1)->get();
-//        $coupon = Coupon::where('status','1')->orderby('id','desc')->get();
-//        View::share(compact('siteinfo','coupon')  );
 
         Schema::defaultStringLength(191);
     }

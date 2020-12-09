@@ -2,17 +2,12 @@
 
 @section('admin_content')
     <div class="sl-mainpanel">
-        <nav class="breadcrumb sl-breadcrumb">
-            <a class="breadcrumb-item" href="#">Starlight</a>
-            <span class="breadcrumb-item active">Order Section</span>
-        </nav>
         <div class="sl-pagebody">
             <div class="card pd-20 pd-sm-40">
-
                 <p class="mg-b-20 mg-sm-b-30">Order Details</p>
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-header"><strong>Order</strong> Details</div>
 
@@ -27,55 +22,40 @@
                                         <th>{{ $order->phone }}</th>
                                     </tr>
                                     <tr>
-                                        <th>Payment: </th>
-                                        <th>{{ $order->card_type }}</th>
+                                        <th>Email: </th>
+                                        <th>{{ $order->email }}</th>
                                     </tr>
                                     <tr>
-                                        <th>Payment ID: </th>
-                                        <th>{{ $order->transaction_id }}</th>
+                                        <th>Address: </th>
+                                        <th>{{ $order->address }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Order Id: </th>
+                                        <th>{{ $order->order_Id }}</th>
                                     </tr>
                                     <tr>
                                         <th>Total :</th>
                                         <th>{{ $order->amount }} BDT</th>
                                     </tr>
                                     <tr>
-                                        <th>Store Amount: </th>
-                                        <th>{{ $order->store_amount }}</th>
-                                    </tr>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header"><strong>Shipping</strong> Details</div>
-
-                            <div class="card-body">
-                                <table class="table">
-                                    <tr>
-                                        <th>Name: </th>
-                                        <th>{{$order->shipment->ship_name}}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Phone: </th>
-                                        <th>{{$order->shipment->ship_phone}}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Email: </th>
-                                        <th>{{$order->shipment->ship_email}}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Address: </th>
-                                        <th>{{$order->shipment->ship_address}}</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Status : </th>
+                                        <th>Status: </th>
                                         <th>
-                                            <span class="badge badge-info">  {{$order->status}}  </span>
+                                            @if($order->status =='1')
+                                                <span class="badge badge-primary">Processing</span>
+                                            @elseif($order->status =="2")
+                                                <span class="badge badge-info">Picked</span>
+                                            @elseif($order->status =="3")
+                                                <span class="badge badge-success">Delivered</span>
+                                            @elseif($order->status =="4")
+                                                <span class="badge badge-danger">Cancel</span>
+                                            @elseif($order->status =="5")
+                                                <span class="badge badge-danger">Return Request</span>
+                                            @elseif($order->status =="6")
+                                                <span class="badge badge-danger">Return Accept</span>
+                                            @endif
+                                                {{ $order->store_amount }}
                                         </th>
                                     </tr>
-
                                 </table>
 
                             </div>
@@ -84,7 +64,8 @@
                 </div>
 
                 <div class="row">
-                    <div class="card pd-20 pd-sm-40 col-lg-12">
+                    <div class="col-md-12">
+                    <div class="card">
                         <h6 class="card-body-title">Product Details </h6>
                         <br>
                         <div class="table-wrapper">
@@ -125,26 +106,20 @@
                             </table>
                         </div><!-- table-wrapper -->
                     </div><!-- card -->
+                    </div>
+                    @if($order->status == '1')
+                        <a href="{{ url('admin/order/progress/'.$order->id) }}" class="btn btn-info">Picked</a>
+                    @elseif($order->status == '2')
+                        <a href="{{ url('admin/order/delivered/'.$order->id) }}" class="btn btn-info">Delevered</a>
+                    @elseif($order->status == '3')
+                        <strong class="text-success">This Order are successfully delivered</strong>
+                    @else
+                        <strong class="text-danger">This order are not valid its canceled</strong>
+                    @endif
                 </div>
-
-
-                @if($order->status == 'Processing')
-                    <a href="{{ url('admin/order/accept/'.$order->id) }}" class="btn btn-info">Payment Accept</a>
-                    <a href="{{ url('admin/order/cancel/'.$order->id) }}" class="btn btn-danger" id="delete">Cancel Order</a>
-                @elseif($order->status == 'accept')
-                    <a href="{{ url('admin/order/delevery/progress/'.$order->id) }}" class="btn btn-info">Delevery Progress</a>
-                    <strong> Payment Already Checked and pass here for delevery request</strong>
-                @elseif($order->status == 'deleveryprogress')
-                    <a href="{{ url('admin/order/delevery/done/'.$order->id) }}" class="btn btn-success">Delevered Done</a>
-                    <strong> Payment Already done your product are handover successfully</strong>
-                @elseif($order->status == 'canceled')
-                    <strong class="text-danger">This order are not valid its canceled</strong>
-                @else
-                    <strong class="text-success">This product are succesfully delevered</strong>
-                @endif
-
             </div>
         </div>
+    </div>
 
 
 @endsection

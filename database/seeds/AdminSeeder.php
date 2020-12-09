@@ -30,6 +30,8 @@ class AdminSeeder extends Seeder
             'facebook_link'=>'Koreanshopbangladesh@gmail.com',
             'google_link'=>'Koreanshopbangladesh@gmail.com',
             'instagram_link'=>'Koreanshopbangladesh@gmail.com',
+            'shiping_cost_inside_dhaka'=>'100',
+            'shiping_cost_outside_dhaka'=>'150',
         ]);
     }
 }

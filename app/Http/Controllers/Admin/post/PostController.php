@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin\post;
+namespace App\Http\Controllers\Admin\post;
 
 use App\Blog;
 use App\Http\Controllers\Controller;
@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Image;
+
 
 class PostController extends Controller
 {
@@ -89,8 +90,8 @@ class PostController extends Controller
 
     //view all post
     public function index(){
-       $blog = Blog::all();
-       return view('admin.post.show_blog',compact('blog'));
+        $blog = Blog::all();
+        return view('admin.post.show_blog',compact('blog'));
     }
 
     //show product form
@@ -203,4 +204,6 @@ class PostController extends Controller
         );
         return Redirect(route('view.post'))->with($notification);
     }
+
+
 }

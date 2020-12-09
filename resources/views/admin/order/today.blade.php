@@ -11,7 +11,9 @@
             <div class="card pd-20 pd-sm-40">
                 <h6 class="card-body-title">Order List</h6>
                 <div class="mg-b-10" >  <button id="pickup" class="btn btn-sm btn-info">pickup</button>
-                    <button id="delivery" class="btn btn-sm btn-success">Delevered</button></div>
+                    <button id="delivery" class="btn btn-sm btn-success">Delevered</button>
+                    <a href="{{route('generate-pdf')}}" class="btn btn-sm btn-warning">Download Pdf</a>
+                </div>
                 <div class="table-wrapper">
                     <table id="datatable1" class="table display responsive nowrap">
                         <thead>
@@ -39,9 +41,8 @@
                                     @elseif($row->status == '2')
                                         <a href="{{ url('admin/order/delivered/'.$row->id) }}" class="btn btn-sm btn-info">Delevered</a>
                                     @endif
-                                        <a href="{{url("admin/order/view/".$row->id)}}" class=" btn btn-sm btn-success" >View</a>
+                                    <a href="{{url("admin/order/view/".$row->id)}}" class=" btn btn-sm btn-success" >View</a>
                                 </td>
-
                             </tr>
                         @endforeach
                         </tbody>
@@ -97,8 +98,6 @@
             }else{
                 toastr.error("Select some order first");
             }
-
         })
-
     </script>
 @endsection

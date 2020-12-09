@@ -39,9 +39,8 @@
                                     @elseif($row->status == '2')
                                         <a href="{{ url('admin/order/delivered/'.$row->id) }}" class="btn btn-sm btn-info">Delevered</a>
                                     @endif
-                                        <a href="{{url("admin/order/view/".$row->id)}}" class=" btn btn-sm btn-success" >View</a>
+                                    <a href="{{url("admin/order/view/".$row->id)}}" class=" btn btn-sm btn-success" >View</a>
                                 </td>
-
                             </tr>
                         @endforeach
                         </tbody>
@@ -97,8 +96,6 @@
             }else{
                 toastr.error("Select some order first");
             }
-
         })
-
     </script>
 @endsection

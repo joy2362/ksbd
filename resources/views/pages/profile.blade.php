@@ -8,10 +8,10 @@
                     <table class="table ps-cart__table">
                         <thead>
                             <tr>
-                                <th>Payment Type</th>
-                                <th>Amount</th>
-                                <th>Date</th>
                                 <th>Order Id</th>
+                                <th>Amount</th>
+                                <th>Order Date</th>
+                                <th>Est. date of delivery</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -19,30 +19,37 @@
                         <tbody>
                             @foreach($order as $row)
                                 <tr>
-                                    <td>{{ $row->card_type }}</td>
+                                    <td>{{ $row->order_Id }}</td>
                                     <td>{{ $row->amount }} BDT</td>
-                                    <td>{{ $row->order_at }}</td>
-                                    <td>{{ $row->transaction_id }}</td>
-                                    <td>
-                                        @if($row->status == "Processing")
-                                            <span class="badge badge-warning">Pending</span>
-                                        @elseif($row->status == 'accept')
-                                            <span class="badge badge-info">Payment Accept</span>
-                                        @elseif($row->status == 'deleveryprogress')
-                                            <span class="badge badge-info">Progress </span>
-                                        @elseif($row->status == 'done')
-                                            <span class="badge badge-success">Delevered </span>
-                                        @else
-                                            <span class="badge badge-danger">Cancel </span>
+                                    <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y') }}</td>
+                                    @if($row->status == '1' || $row->status == '2')
+                                    <td>{{\Carbon\Carbon::parse($row->created_at)->addDays(3)->format('d-m-Y') }}</td>
+                                    @elseif($row->status =='3')
+                                        <td>{{ \Carbon\Carbon::parse($row->delivery_date)->format('d-m-Y') }}</td>
+                                    @else
+                                    <td>-</td>
+                                    @endif
+                                        <td>
+                                        @if($row->status == "1")
+                                            <span class="label label-warning">processing</span>
+                                        @elseif($row->status == '2')
+                                            <span class="label label-info">Picked</span>
+                                        @elseif($row->status == '3')
+                                            <span class="label label-success">Delevered </span>
+                                        @elseif($row->status == '4')
+                                            <span class="label label-danger">Cancel </span>
+                                            @elseif($row->status == '5')
+                                                <span class="label label-danger">Return Request Process </span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-info">View</a>
+                                        <a href="{{url('order/'.$row->order_Id)}}" class="btn btn-sm btn-info">View</a>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $order->links() }}
                 </div>
             </div>
             <div class="col-lg-4 ">
@@ -55,19 +62,13 @@
                     <div class="card-body mt-30">
                         <h4 class="card-title">{{ Auth::user()->name }}</h4>
                         <ul class="list-group ">
-                            <li class="mt-10"><a href="{{route('password.change')}}" class="btn btn-sm "> Password Change </a></li>
-                            <li class="mt-10"><a href=""class="btn btn-sm "> Edit Profile </a></li>
-                            <li class="mt-10"><a href="{{ route('success.orderlist') }}" class="btn btn-sm "> Return Order </a></li>
+                            <li class="mt-10">{{auth()->user()->email}}</li>
+                            <li class="mt-10">{{auth()->user()->phone}}</li>
                         </ul>
-                        <a class="btn btn-sm btn-danger" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                               document.getElementById('logout-form').submit();">
+                        <a class="btn btn-sm btn-danger" href="{{ route('user.logout') }}">
                             {{ __('Logout') }}
                         </a>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
                     </div>
                 </div>
             </div>

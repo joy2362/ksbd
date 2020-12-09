@@ -18,10 +18,61 @@
 
                     <div class="ps-comments">
                         <h3>Comment</h3>
+                        <!--
                         <div class="ps-comment">
-                            <div class="fb-comments" data-href="{{Request::url()}}" data-numposts="10" data-width=""></div>
+                            <div class="ps-comment__thumbnail"><img src="images/user/2.jpg" alt=""></div>
+                            <div class="ps-comment__content">
+                                <header>
+                                    <h4>MARK GREY <span>(15 minutes ago)</span></h4>
+                                   <a href="#">Reply<i class="ps-icon-arrow-left"></i></a
+                                </header>
+                                <p>The development of the mass spectrometer allowed the mass of atoms to be measured with increased accuracy. The device uses the launch and continued operation of the Hubble space telescope probably.</p>
+                            </div>
                         </div>
+
+                        <div class="ps-comment ps-comment--reply">
+                            <div class="ps-comment__thumbnail"><img src="images/user/3.jpg" alt=""></div>
+                            <div class="ps-comment__content">
+                                <header>
+                                    <h4>MARK GREY <span>(3 hours ago)</span></h4><a href="#">Reply<i class="ps-icon-arrow-left"></i></a>
+                                </header>
+                                <p>The development of the mass spectrometer allowed the mass of atoms to be measured with increased accuracy. The device uses  continue ace explore.</p>
+                            </div>
+                        </div>
+                        -->
+                        @foreach($comment as $row)
+                        <div class="ps-comment">
+                            @if($row->user->avatar)
+                                <div class="ps-comment__thumbnail"><img src="{{asset($row->user->avatar)}}" alt=""></div>
+                            @else
+                                <div class="ps-comment__thumbnail"><img src="{{ asset('public/media/user/profile.jpg') }}" alt=""></div>
+                            @endif
+                            <div class="ps-comment__content">
+                                <header>
+                                    <h4>{{$row->user->name}} <span>({{\Carbon\Carbon::parse($row->updated_at)->diffForHumans()}})</span></h4>
+                                </header>
+                                    <p>{{$row->comment}}</p>
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
+                    @if(auth()->check())
+                    <form class="ps-form--comment" action="{{route('post.comment.add')}}" method="post">
+                        @csrf
+                        <h3>LEAVE A COMMENT</h3>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="6" placeholder="Text your message here..." name="comment"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="postId" value="{{$blog->id}}">
+                        <div class="form-group">
+                            <button class="ps-btn ps-btn--sm ps-contact__submit">Send Message<i class="ps-icon-next"></i></button>
+                        </div>
+                    </form>
+                    @endif
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
@@ -69,6 +120,4 @@
             </div>
         </div>
     </div>
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v8.0&appId=2359594734340210&autoLogAppEvents=1" nonce="WXpQX3hM"></script>
 @endsection

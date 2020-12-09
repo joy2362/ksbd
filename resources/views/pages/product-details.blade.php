@@ -134,7 +134,7 @@
                            @foreach($comments as $row)
                             <div class="ps-review">
                                 @if($row->user->avatar)
-                                <div class="ps-review__thumbnail"><img src="{{$row->user->avatar}}" alt=""></div>
+                                <div class="ps-review__thumbnail"><img src="{{asset($row->user->avatar)}}" alt=""></div>
                                 @else
                                     <div class="ps-review__thumbnail"><img src="{{ asset('public/media/user/profile.jpg') }}" alt=""></div>
                                 @endif
@@ -165,7 +165,8 @@
                             </div>
                             @endforeach
                             {{ $comments->links() }}
-                            @if(auth()->check())
+                            @isset($order)
+                                @if(!$userComment)
                             <form class="ps-product__review" action="{{url('product/comment/add')}}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <h4>ADD YOUR REVIEW</h4>
@@ -198,7 +199,8 @@
                                     </div>
                                 </div>
                             </form>
-                                @endif
+                                    @endif
+                                @endisset
                         </div>
                     </div>
                 </div>
@@ -268,6 +270,4 @@
             </div>
         </div>
     </div>
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v8.0&appId=2359594734340210&autoLogAppEvents=1" nonce="WXpQX3hM"></script>
 @endsection

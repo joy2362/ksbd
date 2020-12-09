@@ -313,6 +313,8 @@
                                 <div class="ps-post__thumbnail"><a class="ps-post__overlay" href="{{url('/blog-details/'.$row->id)}}"></a><img src="{{asset($row->post_img)}}" alt="" height="200"></div>
                                 <div class="ps-post__content"><a class="ps-post__title" href="{{url('/blog-details/'.$row->id)}}">{{$row->post_title}}</a>
                                     <p class="ps-post__meta"><span>By: {{$row->user->name}}</span> -<span class="ml-5">{{date_format($row->created_at,"M d,Y")}}</span></p>
+                                    <p> {!!   Str::limit(strip_tags( $row->post_details , 100)) !!}</p>
+                                    <a class="ps-morelink" href="{{url('/blog-details/'.$row->id)}}">Read more<i class="fa fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -335,6 +337,7 @@
             <div class="owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="40" data-owl-nav="false" data-owl-dots="false" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="4" data-owl-item-md="5" data-owl-item-lg="6" data-owl-duration="1000" data-owl-mousedrag="on">
                @foreach($brands as $row)
                     <a href="#"><img src="{{url($row->brand_logo)}}" alt="" height="160" width="160"></a>
+
                 @endforeach
             </div>
         </div>

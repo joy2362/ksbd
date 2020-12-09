@@ -30,14 +30,14 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $today=Order::whereDate('order_at', now())->sum('amount');
-        $month=Order::whereMonth('order_at', now())->sum('amount');
-        $year=Order::whereYear('order_at','=',now())->sum('amount');
-        $delevery=Order::whereDate('order_at', now())->where('status','done')->sum('amount');
+        $today=Order::whereDate('created_at', now())->sum('amount');
+        $month=Order::whereMonth('created_at', now())->sum('amount');
+        $year=Order::whereYear('created_at','=',now())->sum('amount');
+        $delevery=Order::whereDate('created_at', now())->where('status','3')->sum('amount');
         $product=Product::count();
         $brand=Brand::count();
         $user=User::count();
-        $return=Order::where('return_order',2)->sum('amount');
+        $return=Order::where('delivery_cost',2)->sum('amount');
         return view('admin.home')->with(compact('product','brand','user','today','month','year','delevery','return'));
     }
 

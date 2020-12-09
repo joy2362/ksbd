@@ -24,6 +24,8 @@ class CreateSiteDetailsTable extends Migration
             $table->string('facebook_link');
             $table->string('google_link');
             $table->string('instagram_link');
+            $table->integer('shiping_cost_inside_dhaka');
+            $table->integer('shiping_cost_outside_dhaka');
             $table->timestamps();
         });
     }

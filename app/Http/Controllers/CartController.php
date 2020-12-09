@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Coupon;
 use App\Product;
+use App\SiteDetails;
 use Illuminate\Http\Request;
 use DB;
 use App\Wishlist;
@@ -31,6 +32,7 @@ class CartController extends Controller
             return response()->json(['error'=>'Login first!!']);
         }
     }
+//add to cart using ajax
     public function addcart($id){
         $item = Cart::search(function ($cart, $key) use($id) {
             return $cart->id == $id;
@@ -38,19 +40,23 @@ class CartController extends Controller
 
         if(!$item){
             $product = Product::where('id',$id)->first();
-            $data= array();
-            $data['id']=$product->id;
-            $data['name']=$product->product_name;
-            $data['qty']=1;
-            if ($product->discount_price){
-                $data['price']= $product->discount_price;
-            }else{
-                $data['price']= $product->selling_price;
-            }
-            $data['weight']=1;
-            $data['options']['image']=$product->img_1;
+            if ($product->product_stock >= 1) {
+                $data = array();
+                $data['id'] = $product->id;
+                $data['name'] = $product->product_name;
+                $data['qty'] = 1;
+                if ($product->discount_price) {
+                    $data['price'] = $product->discount_price;
+                } else {
+                    $data['price'] = $product->selling_price;
+                }
+                $data['weight'] = 1;
+                $data['options']['image'] = $product->img_1;
 
-            Cart::add($data);
+                Cart::add($data);
+            }else{
+                return response()->json(['error' => 'Product running out of stock']);
+            }
         }else{
             return response()->json(['error' => 'Already in your Cart']);
         }
@@ -65,20 +71,29 @@ class CartController extends Controller
 
         if(!$item){
             $product = Product::where('id',$id)->first();
-            $data= array();
-            $data['id'] = $product->id;
-            $data['name'] = $product->product_name;
-            $data['qty'] = $request->qty ;
-            if ($product->discount_price){
-                $data['price']= $product->discount_price;
+            if ($product->product_stock >= $request->qty){
+                $data= array();
+                $data['id'] = $product->id;
+                $data['name'] = $product->product_name;
+                $data['qty'] = $request->qty ;
+                if ($product->discount_price){
+                    $data['price']= $product->discount_price;
 
+                }else{
+                    $data['price']= $product->selling_price;
+                }
+                $data['weight']=1;
+                $data['options']['image']=$product->img_1;
+
+                Cart::add($data);
             }else{
-                $data['price']= $product->selling_price;
+                $notification=array(
+                    'messege'=>'Product running out of stock',
+                    'alert-type'=>'error'
+                );
+                return redirect()->back()->with($notification);
             }
-            $data['weight']=1;
-            $data['options']['image']=$product->img_1;
 
-            Cart::add($data);
         }else{
             $notification=array(
                 'messege'=>'Already in your Cart',
@@ -100,12 +115,22 @@ class CartController extends Controller
     }
 
     public function updateCart(Request $request){
-        Cart::update($request->productid, $request->qty);
-        $notification=array(
-            'messege'=>'Successfully Update item',
-            'alert-type'=>'success'
-        );
-        return redirect()->back()->with($notification);
+       $productId = Cart::get($request->productid)->id;
+        $product = Product::where('id',$productId)->first();
+        if ($product->product_stock >= $request->qty){
+            Cart::update($request->productid, $request->qty);
+            $notification=array(
+                'messege'=>'Successfully Update item',
+                'alert-type'=>'success'
+            );
+            return redirect()->back()->with($notification);
+        }else{
+            $notification=array(
+                'messege'=>'Product running out of stock',
+                'alert-type'=>'error'
+            );
+            return redirect()->back()->with($notification);
+        }
     }
 
     public function removeItem(Request $request){
@@ -173,13 +198,26 @@ class CartController extends Controller
     }
 
     public function showCheckout(){
-        if(Cart::count() >1){
-            $cart= Cart::content();
-            $total=0;
+
+        if(Cart::count() >0){
+            $shiping_cost = SiteDetails::first();
+
+            $cart = Cart::content();
+            $total = 0;
+
             foreach ($cart as $row){
-                $total+=$row->price *$row->qty;
+                $total += $row->price *$row->qty;
             }
-            return view('pages.checkout')->with(compact('cart','total'));
+
+            if (session::has('coupon')){
+                $total = session::get('coupon')['balance'];
+            }
+
+            $total += $shiping_cost->shiping_cost_inside_dhaka;
+            $shiping= $shiping_cost->shiping_cost_inside_dhaka;
+
+            return view('pages.checkout')->with(compact('cart','total','shiping'));
+
         }else{
             $notification=array(
                 'messege'=>'No product found in your cart',
@@ -187,5 +225,50 @@ class CartController extends Controller
             );
             return redirect()->back()->with($notification);
         }
+    }
+
+    public function changeshipingcost($value){
+       if ($value == 2){
+
+           $shiping_cost = SiteDetails::first();
+           $cart = Cart::content();
+           $total = 0;
+
+           foreach ($cart as $row){
+               $total += $row->price *$row->qty;
+           }
+
+           if (session::has('coupon')){
+               $total = session::get('coupon')['balance'];
+           }
+
+           $total += $shiping_cost->shiping_cost_outside_dhaka;
+
+           $data=[
+               'shiping'=> $shiping_cost->shiping_cost_outside_dhaka ,
+               'totalPrice'=>$total
+           ];
+           return response()->json($data);
+       }else{
+           $shiping_cost = SiteDetails::first();
+           $cart = Cart::content();
+           $total = 0;
+
+           foreach ($cart as $row){
+               $total += $row->price *$row->qty;
+           }
+
+           if (session::has('coupon')){
+               $total = session::get('coupon')['balance'];
+           }
+
+           $total += $shiping_cost->shiping_cost_inside_dhaka;
+
+           $data=[
+               'shiping'=> $shiping_cost->shiping_cost_inside_dhaka ,
+               'totalPrice'=>$total
+           ];
+           return response()->json($data);
+       }
     }
 }

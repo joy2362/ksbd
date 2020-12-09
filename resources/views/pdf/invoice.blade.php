@@ -112,7 +112,7 @@
                         </td>
 
                         <td class="invoice">
-                            Invoice #: 123<br>
+                            Invoice #: {{$order->order_Id}}<br>
                             Date: @php echo  date(" M  d, Y") @endphp
                         </td>
                     </tr>
@@ -126,15 +126,15 @@
                     <tr>
                         <td>
                             Invoiced To:<br>
-                            Name: Abdullah Zahid<br>
-                            E-mail: abdullahzahidjoy@gmail.com
+                            Name: {{$order->user->name}}<br>
+                            E-mail: {{$order->user->email}}
                         </td>
                         <td></td>
                         <td></td>
                         <td>
                             Shipping Details:<br>
-                           Name:  Abdullah Zahid<br>
-                           Address:   145/3-1, matikhata dhaka cantonment dhaka-1206
+                           Name:  {{$order->name}}<br>
+                           Address:   {{$order->address}}
                         </td>
                     </tr>
                 </table>
@@ -156,52 +156,35 @@
                 Price
             </td>
         </tr>
-
+        @foreach ($content as $row)
+            @php
+            $product = DB::table('products')->where('id',$row->id)->first();
+            @endphp
         <tr class="item ">
             <td class="first">
-                LANEIGE Lip Sleeping Mask 3g
+                {{$product->product_name}}
             </td>
-            <td>1200</td>
-            <td>1</td>
+            <td>{{$row->price}}</td>
+            <td> {{$row->qty}}</td>
             <td>
-                300.00
+                {{ $row->qty * $row->price}}
             </td>
         </tr>
+        @endforeach
 
-        <tr class="item">
-            <td class="first">
-                Innisfree Daily UV Protection Cream No Sebum SPF35 PA+++ 50ml
-            </td>
-            <td>1200 </td>
-            <td>1</td>
-            <td>
-                75.00
-            </td>
-        </tr>
-
-        <tr class="item last">
-            <td class="first">
-                SOME BY MI Galactomyces Pure Vitamin C Glow Serum
-            </td>
-            <td>1200</td>
-            <td>1</td>
-            <td>
-                10.00
+        <tr class="total">
+            <td colspan="4">
+                Sub total: {{$order->amount - $order->delivery_cost}}
             </td>
         </tr>
         <tr class="total">
             <td colspan="4">
-                Sub total: 385.00
+                Delivery Charge: {{$order->delivery_cost}}
             </td>
         </tr>
         <tr class="total">
             <td colspan="4">
-                Delivery Charge: 10
-            </td>
-        </tr>
-        <tr class="total">
-            <td colspan="4">
-                Total: 385.00
+                Total: {{$order->amount}}
             </td>
         </tr>
     </table>

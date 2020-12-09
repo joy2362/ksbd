@@ -1,6 +1,6 @@
 @php
     $siteinfo=App\SiteDetails::where('id',1)->get();
-           $coupon = App\Coupon::where('status','1')->orderby('id','desc')->get();
+    $coupon = App\Coupon::where('status','1')->orderby('id','desc')->get();
 @endphp
 
 <!DOCTYPE html>
@@ -57,51 +57,21 @@
                 </div>
                 <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12 ">
                     <div class="header__actions">
-                        <!--order tracking modal-->
-                        <div class="modal fade" id="order" tabindex="-1" role="dialog" aria-labelledby="order" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Your Order Id</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form method="post" action="{{ route('order.tracking') }}">
-                                            @csrf
-                                            <div class="form-row">
-                                                <input type="text" name="code" required="" class="form-control" placeholder="Your Order id">
-                                            </div><br>
-                                            <button class="btn btn-danger" type="submit">Track Now</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--end order tracking  modal-->
-
+                        <a href="{{url('order/tracking')}}">Order Status</a>
                         @guest
                             <a href="{{url('login')}}">Login</a>
                             <a href="{{route('register')}}" >Regiser</a>
                         @else
-                            <!--
-                            <a href="{{route('password.change')}}" >Regiser</a>
-                            -->
+
                             <div class="btn-group ps-dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}<i class="fa fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{url('profile')}}">Profile</a></li>
-                                    <li><a href="#">Setting</a></li>
+                                    <li><a href="{{route('profile.setting')}}">Setting</a></li>
                                     <li><a href="{{ url('wishlist') }}">Whishlist</a></li>
-                                    <li> <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
+                                    <li> <a class="dropdown-item" href="{{ route('user.logout') }}">
                                             {{ __('Logout') }}
                                         </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            @csrf
-                                        </form>
                                     </li>
                                 </ul>
                             </div>
@@ -163,8 +133,8 @@
                 <div class="col-lg-5 col-md-7 col-sm-12 col-xs-12 ">
                     <form class="ps-subscribe__form" action="{{route('store.newsletter')}}" method="post">
                         @csrf
-                        <input class="form-control" type="text" placeholder="" name="email">
-                        <button>Sign up now</button>
+                        <input class="form-control" type="text" placeholder="Email" name="email">
+                        <button>subscribe</button>
                     </form>
                 </div>
                 <div class="col-lg-4 col-md-5 col-sm-12 col-xs-12 ">
@@ -225,7 +195,7 @@
                             </header>
                             <footer>
                                 <ul class="ps-list--line">
-                                    <li><a href="#" data-toggle="modal" data-target="#order">Order Status</a></li>
+                                    <li> <a href="{{url('order/tracking')}}">Order Status</a></li>
                                     <li><a href="#">Shipping and Delivery</a></li>
                                     <li><a href="#">Returns</a></li>
                                     <li><a href="#">Payment Options</a></li>
@@ -336,7 +306,7 @@
         var link = $(this).attr("href");
         swal({
             title: "Are you Want to Return?",
-            text: "Once Return,You will return your money!",
+            text: "Once Return,You will got your money back!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -344,8 +314,22 @@
             .then((willDelete) => {
                 if (willDelete) {
                     window.location.href = link;
-                } else {
-                    swal("Cancel");
+                }
+            });
+    });
+    $(document).on("click", "#cancle", function(e){
+        e.preventDefault();
+        var link = $(this).attr("href");
+        swal({
+            title: "Are you Want to Cancel?",
+            text: "Once Cancel,This will be Permanently Cancel your order!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    window.location.href = link;
                 }
             });
     });
@@ -410,6 +394,39 @@
             alert('danger');
         }
     })
+</script>
+<script>
+    $(document).ready(function(){
+        $('#location').change(function(){
+            let value = $(this).val();
+            if (value){
+                $.ajax({
+                    url:"{{ url('shipingcost') }}/"+value,
+                    method:"get",
+                    success:function(data){
+                        $("#shipingCharge").html(data.shiping + " BDT");
+                        $("#total").html(data.totalPrice + " BDT");
+                        $("#totalAmount").val(data.totalPrice);
+                        console.log(data)
+                    }
+                });
+
+            }
+
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $('#rdo02').change(function(){
+            Swal.fire({
+                icon: 'error',
+                title: 'Sorry...',
+                text: 'Online Payment system currently not available!',
+            })
+
+        });
+    });
 </script>
 </body>
 </html>

@@ -34,6 +34,7 @@
                             </span>
                     </div>
                 </form>
+                <!--
                 <p class=" text-center  mt-60">
                     Or Login Using
                 </p>
@@ -43,6 +44,7 @@
                         <a href="{{ url('/auth/redirect/google') }}" class="btn btn-success"><i class="fa fa-google-plus"></i> Google</a>
                     </div>
                 </div>
+                -->
             </div>
         </div>
     </div>
