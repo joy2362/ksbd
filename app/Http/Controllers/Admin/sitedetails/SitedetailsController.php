@@ -71,12 +71,12 @@ class SitedetailsController extends Controller
     }
     public function DatabaseBackup()
     {
-        return view('admin.siteinfo.database-backup')->with('files', File::allFiles('storage/app/Laravel'));
+        return view('admin.siteinfo.database-backup')->with('files', File::allFiles('storage/app/backup'));
     }
 
     public function BackupNow()
     {
-        \Artisan::call('backup:run',['--only-db'=>true]);
+        \Artisan::call('backup:run');
         $notification=array(
             'messege'=>'Successfully Database Backup ',
             'alert-type'=>'success'
@@ -86,7 +86,7 @@ class SitedetailsController extends Controller
 
     public function DeleteDatabase($getFilename)
     {
-        Storage::delete('Laravel/'.$getFilename);
+        Storage::delete('backup/'.$getFilename);
         $notification=array(
             'messege'=>'Successfully Backup Delete  ',
             'alert-type'=>'success'
